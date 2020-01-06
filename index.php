@@ -4,6 +4,9 @@
 		<meta charset="utf-8">
 		<title></title>
 		<script>
+			
+			let components = {};
+		
 			<?php 
 			
 			function recurseIncludeJS($path) {
@@ -19,6 +22,7 @@
 			recurseIncludeJS("./private/client/");
 			?>
 		</script>
+		<style id="css"></style>
 	</head>
 	<body>
 		

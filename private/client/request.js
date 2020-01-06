@@ -1,20 +1,22 @@
-function AjaxRequest(page, data) {
+function request(handler, data) {
 	return new Promise((resolve, reject) => {
 		
-		let form_data;
+		let formData;
 		
 		if (data instanceof HTMLFormElement) { //If this is a form; then we can use its data directly
-			form_data = new FormData(data);
+			formData = new FormData(data);
 		}
 		else { //Otherwise; treat it is a set of key:value pairs
-			form_data = new FormData(); //Create an object to store the data we are submitting
+			formData = new FormData(); //Create an object to store the data we are submitting
 			for (let field in data) { //Loop through the array, and add each field to the form data object
-				form_data.append(field, data[field]);
+				formData.append(field, data[field]);
 			}
 		}
+		
+		formData.append("handler", handler)
 
 		let request = new XMLHttpRequest();
-		request.open("post", page); //Ensure that the data is sent over POST not GET
+		request.open("post", "requet.php"); //Ensure that the data is sent over POST not GET
 		request.onreadystatechange = ()=>{ //Event fires whenever the state of the request changes
 			if (request.readyState == 4 && request.status == 200) { //Once our request has reached a successful status, we can return the result
 				resolve(request.responseText);
@@ -23,6 +25,6 @@ function AjaxRequest(page, data) {
 				reject(request.status);
 			}
 		}
-		request.send(form_data);
+		request.send(formData);
 	});
 }
