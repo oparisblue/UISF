@@ -6,7 +6,7 @@
 		<script>
 			<?php
 
-			// Goes through the serer folder and adds each file as a Network request for AJAX
+			// Goes through the serer folder and adds each file as a Network request for JS
 			$serverFiles = scandir("./private/server/");
 			$requestObj = "{";
 			foreach ($serverFiles as $serverFile) {
