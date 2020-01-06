@@ -12,6 +12,12 @@ const ACCOUNTS = [
 		"user"=>"root",
 		"password"=>"",
 		"database"=>"uisf"
+	],
+	[
+		"host"=>"localhost",
+		"user"=>"root",
+		"password"=>"root",
+		"database"=>"uisf"
 	]
 ]; //A 2d array containing key value pairs for each database account which exists. Each account is represented by an assoc array, containing a "host", "user", "password", and "database" for the account
 
@@ -20,6 +26,8 @@ const ACCOUNT_NUMBER = 0; //The index of the database account to use (which posi
 $loginData = ACCOUNTS[ACCOUNT_NUMBER]; //Get the associative array of login information for this account
 
 $dbc = null;
+
+$doSQLConnect = true;
 
 if (isset($doSQLConnect)) {
 	$dbc = mysqli_init(); //Securely initilize a database connection
