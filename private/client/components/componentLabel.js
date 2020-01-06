@@ -19,7 +19,7 @@ components["label"] = class ComponentLabel extends Component {
 	}
 	
 	/**
-	* @Override
+	* @override
 	*/
 	onTick() {
 		if (this.prevData != this.data) {

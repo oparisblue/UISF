@@ -25,7 +25,7 @@ class Animation {
 	* @param  {component}comp The component to animate.
 	* @return {string} The new CSS, affected by the animation.
 	*/
-	onTick(css, comp) {
+	onTick(css, _comp) {
 		this.ticks++;
 		// Override me!
 		return css;

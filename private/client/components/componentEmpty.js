@@ -11,7 +11,7 @@ components["empty"] = class ComponentEmpty extends Component {
 	}
 	
 	/**
-	* @Override
+	* @override
 	*/
 	onTick() {
 		return this.doDefaultRender("");

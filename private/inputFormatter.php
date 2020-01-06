@@ -1,32 +1,37 @@
 <?php
 
 /**
+* An InputFormatter takes an unvalided input, and provides ways to ensure it matches a given format. If the input is invalid, an user-readable error is thrown, which is able to be passed back to the client.
+* All methods return the class to allow for easy constructing. Example use:
+* <code>new InputFormatter($_POST["username"], "Username")->length(6, 12)->lower()->notMatches("admin")->get();</code>
+* The call to <code>get()</code> collapses the formatter back to a string or number, with any modifications applied.
 * @author Simon Watson
-* The class for formatting all inputs passed into each AJAX request.
 */
-
 class InputFormatter {
 	private $input;
 
 	/**
-	* The __construct function sets the input string to be used in the class.
+	* Create an input formatter for the given string.
 	* @param {string}input The input to format.
+	* @param {string}niceName The name to use when referring to this field in error messages.
 	*/
-	public function __construct($input) {
-		$this->input = $input;
+	public function __construct($input, $niceName) {
+		$this->input    = $input;
+		$this->niceName = $niceName;
 	}
 
 	/**
-	* The get function returns the input after all checks and mutations have been made.
+	* Collapse the input formatter to a value after all checks and mutations have been made.
+	* @return {any} The final value of the formatter.
 	*/
 	public function get() {
 		return $this->input;
 	}
 
 	/**
-	* The length function checks if the length of the input string is within the given parameters.
-	* @param {num}min The <b>minimum</b> amount of characters the string needs to be.
-	* @param {num}max The <b>maximum</b> amount of characters the string needs to be.
+	* Check if the length of the input string is within the given range.
+	* @param {number}min The <b>minimum</b> amount of characters for the string.
+	* @param {number}max The <b>maximum</b> amount of characters for the string.
 	*/
 	public function length($min, $max) {
 		minLength($min);
@@ -35,126 +40,138 @@ class InputFormatter {
 	}
 
 	/**
-	* The minLength function checks if the length of the input string is greater than the minimum amount of characters.
-	* @param {num}min The <b>minimum</b> amount of characters the string needs to be.
+	* Check if the length of the input string is at least n characters.
+	* @param {number}min The <b>minimum</b> amount of characters the string needs to be.
 	*/
 	public function minLength($min) {
-		if (strlen($this->input) < $min) throw new Exception("Input must have at least $min characters.");
+		if (strlen($this->input) < $min)
+			throw new Exception("$this->niceName must have at least $min characters!");
 		return $this;
 	}
 
 	/**
-	* The maxLength function checks if the length of the input string is less than the maximum amount of characters.
-	* @param {num}max The <b>maximum</b> amount of characters the string needs to be.
+	* Check if the length of the input string is at most n characters.
+	* @param {number}max The <b>maximum</b> amount of characters the string needs to be.
 	*/
 	public function maxLength($max) {
-		if (strlen($this->input) > $max) throw new Exception("Input must be less then $max characters.");
+		if (strlen($this->input) > $max)
+			throw new Exception("$this->niceName must have at most $max characters!");
 		return $this;
 	}
 
 	/**
-	* The matches function checks if the input matches the given value.
-	* @param {any}value The value that gets checked with the input.
+	* Check if the input exactly matches the given value.
+	* @param {any}value The value the input must match.
 	*/
 	public function matches($value) {
-		if ($this->input != $value) throw new Exception("Input does not match.");
+		if ($this->input != $value)
+			throw new Exception("$this->niceName must match \"$value\"!");
 		return $this;
 	}
 
 	/**
-	* The notMatches function checks if the input does not match the given value.
-	* @param {any}value The value that gets checked with the input.
+	* Check if the input doesn't exactly match the given value.
+	* @param {any}value The value the input can't match.
 	*/
 	public function notMatches($value) {
-		if ($this->input == $value) throw new Exception("Input does match.");
+		if ($this->input == $value)
+			throw new Exception("$this->niceName can't match \"$value\"!");
 		return $this;
 	}
 
 	/**
-	* The enum function checks to see if the input is in the given array.
-	* @param {array}array The array that the input gets checked past.
+	* Check if the the input is an enum of the given set (e.g. in an array).
+	* @param {array}array An array of all possible enum values.
 	*/
 	public function enum($array) {
-		if (!in_array($this->input, $array)) throw new Exception("Input is not in the array");
+		if (!in_array($this->input, $array))
+			throw new Exception("$this->niceName must be one of " . implode($array, ", ") . "!");
 		return $this;
 	}
 
 	/**
-	* The notEnum function checks to see if the input is not in the given array.
-	* @param {array}array The array that the input gets checked past.
+	* Check if the the input is not an enum of the given set (e.g. not in an array).
+	* @param {array}array An array of all possible enum values.
 	*/
 	public function notEnum($array) {
-		if (in_array($this->input, $array)) throw new Exception("Input is in the array");
+		if (in_array($this->input, $array))
+			throw new Exception("$this->niceName can't be one of " . implode($array, ", ") . "!");
 		return $this;
 	}
 
 	/**
-	* The sqlMatches function checks to see if the input matches the result of the SQL query.
-	* @param {string}query The SQL query that gets run.
+	* Check if the given SQL query returns at least 1 row when given the value as input.
+	* <strong>Note:</strong> the SQL query should contain exactly 1 wildcard value <code>?</code>.
+	* @param {string}query The SQL query to run.
 	*/
 	public function sqlMatches($query) {
 		if (!sqlHasResults(sql($query, is_numeric($this->input ? 'i' : 's'), [$this->input])))
-			throw new Exception("Query result does not match input");
+			throw new Exception("$this->niceName \"$this->input\" already exists!");
 		return $this;
 	}
 
 	/**
-	* The sqlMatches function checks to see if the input does not match the result of the SQL query.
-	* @param {string}query The SQL query that gets run.
+	* Check if the given SQL query returns exactly 0 rows when given the value as input.
+	* <strong>Note:</strong> the SQL query should contain exactly 1 wildcard value <code>?</code>.
+	* @param {string}query The SQL query to run.
 	*/
 	public function notSqlMatches($query) {
 		if (sqlHasResults(sql($query, is_numeric($this->input ? 'i' : 's'), [$this->input])))
-			throw new Exception("Query result does match input");
+			throw new Exception("$this->niceName \"$this->input\" cannot be found!");
 		return $this;
 	}
 
 	/**
-	* The num function will convert the input string into a float for future use.
+	* Ensures the input is a number, then converts its type.
 	*/
 	public function num() {
-		if (!is_numeric($this->input)) throw new Exception("The input is not numeric");
+		if (!is_numeric($this->input))
+			throw new Exception("$this->niceName must be a number!");
 		$this->input = parse_float($this->input);
 		return $this;
 	}
 
 	/**
-	* The gt function checks if the input is greater than the given number.
-	* @param {num}number The number that is checked if input is greater than it.
+	* Check if the input is greater than the given number.
+	* @param {num}number The number to check the input against.
 	*/
 	public function gt($number) {
-		if ($this->input < $number) throw new Exception("The input is not greater than $number");
+		if ($this->input <= $number)
+			throw new Exception("$this->niceName must be greater than $number!");
 		return $this;
 	}
 
 	/**
-	* The lt function checks if the input is less than the given number.
-	* @param {num}number The number that is checked if input is less than it.
+	* Check if the input is lesser than the given number.
+	* @param {num}number The number to check the input against.
 	*/
 	public function lt($number) {
-		if ($this->input > $number) throw new Exception("The input is not less than $number");
+		if ($this->input >= $number)
+			throw new Exception("$this->niceName must be lesser than $number!");
 		return $this;
 	}
 
 	/**
-	* The email function checks to see if the input is a valid email.
+	* Check if the input is a valid email address.
 	*/
 	public function email() {
 		if (!filter_var($this->input, FILTER_VALIDATE_EMAIL))
-			throw new Exception("The email " . $this->input . " is not valid email address");
+			throw new Exception(htmlentities($this->input) . " is not valid email address!");
 		return $this;
 	}
 
 	/**
-	* The passwordMatches funciton checks to see if the input matches the a hashed string.
-	* @param {string}hashedPassword The hased password that gets checked if input is valid.
+	* Check if the hash of the input matches a given password hash.
+	* @param {string}hashedPassword The hashed password to verify the input against.
 	*/
-	public function passwordMatches($hasedPassword) {
-		if (!password_verify($this->input, $hasedPassword)) throw new Exception("Input is not a valid password");
+	public function passwordMatches($hashedPassword) {
+		if (!password_verify($this->input, $hashedPassword))
+			throw new Exception("Invalid Password!");
 		return $this;
 	}
 
 	/**
-	* The passwordHash function will set the input to a hased version of its self.
+	* Hash the input to form a valid password hash.
 	*/
 	public function passwordHash() {
 		$this->input = password_hash($this->input, PASSWORD_DEFAULT);
@@ -162,52 +179,56 @@ class InputFormatter {
 	}
 
 	/**
-	* The lower function sets the input to be all lower case.
+	* Convert the input to lower case.
 	*/
-	public function lowwer() {
+	public function lower() {
 		$this->input = strtolower($this->input);
 	}
 
 	/**
-	* The upper function sets the input to be all upper case.
+	* Convert the input to upper case.
 	*/
 	public function upper() {
 		$this->input = strtoupper($this->input);
 	}
 
 	/**
-	* The predicate function runs a custom anonymise function.
-	* @param {lambda}func The function that gets run. <b>Must</b> return true or false.
-	* @param {string}msg The message that gets thrown if the function returns false.
+	* Run a lambda function. If it doesn't return <code>true</code> fail with the given message.
+	* @param {lambda}func The function to run. <b>Must</b> return a boolean.
+	* @param {string}msg The message to thrown if the function returns <code>false</code>.
 	*/
 	public function predicate($func, $msg) {
-		if (!$func($this->input)) throw new Exception($msg);
+		if (!$func($this->input))
+			throw new Exception($msg);
 		return $this;
 	}
 
 	/**
-	* The regex function runs a custom regex on the input based off the options provided.
-	* @param {string}options The regex option string.
+	* Check if the input matches a RegEx.
+	* @param {string}options The RegEx.
 	*/
 	public function regex($options) {
-		if (!preg_match($options, $this->input)) throw new Exception("The regex does not match");
+		if (!preg_match($options, $this->input))
+			throw new Exception("$this->niceName is in an invalid format!");
 		return $this;
 	}
 
 	/**
-	* The includes function checks to see if the given value is in the input.
-	* @param {string}string The value that gets check if it is in the input.
+	* Check if a given value appears somewhere in the input.
+	* @param {string}string The value which should exist in the input
 	*/
-	public function includes ($string) {
-		if (!strpos($this->input, '$string')) throw new Exception("The value '$string' is not in the input");
+	public function includes($string) {
+		if (!strpos($this->input, $string))
+			throw new Exception("$this->niceName must contain \"$string\"!");
 		return $this;
 	}
 
 	/**
-	* The notEmpty function checks to see if the input is empty.
+	* Check that the input is not empty.
 	*/
 	public function notEmpty() {
-		if (!is_numeric($this->input) && $this->input != "") throw new Exception("The input is empty");
+		if ($this->input == "")
+			throw new Exception("Please enter a $this->niceName!");
 		return $this;
 	}
 }

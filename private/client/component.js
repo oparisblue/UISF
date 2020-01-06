@@ -1,6 +1,6 @@
 /**
 * <p>Represents a component which is drawn on the page.</p>
-* <p><strong>NOTE:</strong> this is an abstract class! It will error if you try to instantiate it. Override Component to do anything useful.</p>
+* <p><strong>NOTE:</strong> this is an abstract class! Override Component to do anything useful.</p>
 * @author Orlando
 */
 class Component {
