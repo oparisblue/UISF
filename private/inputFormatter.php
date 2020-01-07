@@ -215,7 +215,7 @@ class InputFormatter {
 
 	/**
 	* Check if a given value appears somewhere in the input.
-	* @param {string}string The value which should exist in the input
+	* @param {string}string The value which should exist in the input.
 	*/
 	public function includes($string) {
 		if (!strpos($this->input, $string))
@@ -229,6 +229,16 @@ class InputFormatter {
 	public function notEmpty() {
 		if ($this->input == "")
 			throw new Exception("Please enter a $this->niceName!");
+		return $this;
+	}
+	
+	/**
+	* Check if the input is valid JSON.
+	*/
+	public function isValidJSON() {
+		$testJSON = json_decode($this->input);
+		if (json_last_error() !== 0) 
+			throw new Exception("JSON is not valid");
 		return $this;
 	}
 }

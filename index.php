@@ -12,6 +12,9 @@ session_start();
 			
 			let components = {};
 			
+			// Loads in the users settings
+			const USER_PREFERENCES = <?= isset($_SESSION['settings']) ? $_SESSION['settings'] : "{}" ?>;
+			
 			<?php
 			function allFiles($path, $f) {
 				foreach (scandir($path) as $file) {
@@ -39,14 +42,14 @@ session_start();
 			?>
 			
 			const Network = {
-				<?=allFiles("./private/server/", function($file, $name, $path) {
+				<?= allFiles("./private/server/", function($file, $name, $path) {
 					return $name;
-				})?>
+				}) ?>
 			};
 			const UI = {
-				<?=allFiles("./private/component/", function($file, $name, $path) {
+				<?= allFiles("./private/component/", function($file, $name, $path) {
 					return file_get_contents($path . $file);
-				})?>
+				}) ?>
 			};
 			
 			// Function to check if the user is logged in or not
