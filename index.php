@@ -24,6 +24,13 @@ session_start();
 				}
 			}
 			
+			function rightsEnum() {
+				$rights = explode("\n", str_replace("\r", "\n", file_get_contents("./private/rights.txt")));
+				foreach ($rights as $right) {
+					?><?=$right?>: "<?=$right?>",<?php
+				}
+			}
+			
 			function recurseIncludeJS($path) {
 				$js = scandir($path);
 				foreach ($js as $jsFile) {
@@ -48,6 +55,10 @@ session_start();
 					return file_get_contents($path . $file);
 				})?>
 			};
+			const Rights = {
+				<?=rightsEnum();?>
+			}
+			const UserRights = new Set("<?=isset($_SESSION["rights"]) ? $_SESSION["rights"] : ""?>".split(","));
 			
 			// Function to check if the user is logged in or not
 			function isLoggedIn() {
