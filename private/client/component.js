@@ -16,10 +16,11 @@ class Component {
 		this.id = "comp" + (Component.nextID++);
 		this.data = ``;
 		
-		for (let arg of arguments) {
-			arg = arg[0];
-			if (arg.constructor == CompData) this.data = arg.data;
-			else if (arg[0] == "#")          this.id   = arg.slice(1);
+		if (arguments[0].length >= 1) {
+			for (let arg of arguments[0]) {
+				if (arg.constructor == CompData) this.data = arg.data;
+				else if (arg[0] == "#")          this.id   = arg.slice(1);
+			}
 		}
 		
 		// super call then actually create the dom node...
@@ -30,6 +31,7 @@ class Component {
 	* @param {component}child The child to add.
 	*/
 	addChild(child) {
+		if (child == null) return;
 		if (!this.canHaveChildren) throw new Error("Can't add a child to this element!");
 		this.children.push(child);
 		this.domNode.appendChild(child.getDOMNode());

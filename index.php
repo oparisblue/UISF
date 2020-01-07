@@ -8,19 +8,17 @@
 			let components = {};
 			
 			<?php
-			// Goes through the serer folder and adds each file as a Network request for JS
-			$serverFiles = scandir("./private/server/");
-			$requestObj = "{";
-			foreach ($serverFiles as $serverFile) {
-				if ($serverFile[0] == ".") continue;
-				else if (strpos($serverFile, ".php")) {
-					$fileName = substr($serverFile, 0, strrpos($serverFile, "."));
-					$requestObj .= "$fileName: \"$fileName\",";
+			function allFiles($path, $f) {
+				foreach (scandir($path) as $file) {
+					if ($file[0] == ".")            continue;
+					else if (is_dir($path . $file)) continue;
+					$name = explode(".", $file);
+					array_pop($name);
+					$name = strtoupper(implode(".", $name));
+					?><?=$name?>: `<?=$f($file, $name, $path)?>`,<?php
 				}
 			}
-			$requestObj .= "};\n\n";
-			echo "const Network = $requestObj";
-		
+			
 			function recurseIncludeJS($path) {
 				$js = scandir($path);
 				foreach ($js as $jsFile) {
@@ -33,6 +31,18 @@
 			// Include the JavaScript for every file in private/client/``
 			recurseIncludeJS("./private/client/");
 			?>
+			
+			const Network = {
+				<?=allFiles("./private/server/", function($file, $name, $path) {
+					return $name;
+				})?>
+			};
+			const UI = {
+				<?=allFiles("./private/component/", function($file, $name, $path) {
+					return file_get_contents($path . $file);
+				})?>
+			};
+			
 		</script>
 		<style id="css"></style>
 	</head>
