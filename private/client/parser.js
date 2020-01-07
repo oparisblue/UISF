@@ -1,8 +1,8 @@
-function parseUIToComponent(ui) {
+function parseUIToComponent(ui, id) {
 	// Ensure we always use *NIX line breaks, then break the string apart by lines
 	let lines = ui.replace(/\r/g, `\n`).split(`\n`);
 	// Parent all of the UI to an empty element
-	let stack = [new components["empty"]()];
+	let stack = [new components["empty"](id)];
 	
 	let prevComp = null;
 	
@@ -16,6 +16,7 @@ function parseUIToComponent(ui) {
 		if (indents > stack.length) stack.push(prevComp);
 		// Otherwise if there are less indents, remove that many elements from the top of the stack
 		else for (let i = stack.length; i > indents; i++) stack.pop();
+		line = line.replace(/\t/g, "");
 		
 		// Parse the line to a set of parameters
 		let params = [""];
@@ -47,7 +48,7 @@ function parseUIToComponent(ui) {
 
 function setScreen(ui) {
 	$("#main").remove();
-	activeComponents[0] = ui;
-	document.body.appendChild(activeComponents[0]);
+	activeComponents[0] = parseUIToComponent(ui, "#main");
+	document.body.appendChild(activeComponents[0].getDOMNode());
 	
 }

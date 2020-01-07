@@ -20,8 +20,7 @@ window.onload = ()=>{
 		document.body.appendChild(comp.getDOMNode());
 	}
 	
-	//activeComponents[0].addChild(new components.label(new CompData("Hello, world!"), "title"));
-	activeComponents[0] = parseUIToComponent(UI.BASIC);
+	setScreen(UI.BASIC);
 	
 	window.requestAnimationFrame(render);
 }
