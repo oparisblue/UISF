@@ -1,3 +1,8 @@
+<?php
+
+session_start();
+
+?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 	<head>
@@ -32,7 +37,13 @@
 
 			// Include the JavaScript for every file in private/client/``
 			recurseIncludeJS("./private/client/");
+			
 			?>
+			
+			// Function to check if the user is logged in or not
+			function isLoggedIn() {
+				return <?= isset($_SESSION["email"]) ? "true" : "false" ?>;
+			}
 		</script>
 		<style id="css"></style>
 	</head>
