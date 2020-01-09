@@ -8,6 +8,16 @@ session_start();
 	<head>
 		<meta charset="utf-8">
 		<title></title>
+		<style>
+			body, html {
+				height:100%;
+				padding:0;
+				margin:0;
+				font-family:"Trebuchet MS";
+				box-sizing:border-box;
+				overflow:hidden;
+			}
+		</style>
 		<script>
 			
 			let components = {};

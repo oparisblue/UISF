@@ -11,3 +11,10 @@ function $(ele) {
 	let result = document.querySelectorAll(ele);
 	return result.length == 0 ? null : (result.length == 1 ? result[0] : result);
 }
+
+class Vector {
+	constructor(x, y) {
+		this.x = x;
+		this.y = y;
+	}
+}

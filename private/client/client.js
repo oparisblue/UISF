@@ -20,7 +20,7 @@ window.onload = ()=>{
 		document.body.appendChild(comp.getDOMNode());
 	}
 	
-	setScreen(UI.BASIC);
+	setScreen(UI.MAIN);
 	
 	window.requestAnimationFrame(render);
 }
