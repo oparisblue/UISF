@@ -29,10 +29,11 @@ let prevCSS = ``;
 
 function render() {
 	
-	let css = ``;
-	for (let component of activeComponents) css += component.onTick();
-	if (css != prevCSS) document.getElementById("css").innerHTML = css;
-	prevCSS = css;
+	let css = new Set();
+	for (let component of activeComponents) css.add(component.onTick());
+	let dedupeCSS = Array.from(css).reduce((acc, val)=>acc = acc + val, "");
+	if (dedupeCSS != prevCSS) document.getElementById("css").innerHTML = dedupeCSS
+	prevCSS = dedupeCSS;
 	
 	window.requestAnimationFrame(render);
 }
