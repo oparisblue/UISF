@@ -12,12 +12,13 @@ class Component {
 		this.children = [];
 		this.domNode = null;
 		this.canHaveChildren = true;
+		this.args = arguments[0];
 		
 		this.id = "comp" + (Component.nextID++);
 		this.data = ``;
 		
-		if (arguments[0].length >= 1) {
-			for (let arg of arguments[0]) {
+		if (this.args.length >= 1) {
+			for (let arg of this.args) {
 				if (arg.constructor == CompData) this.data = arg.data;
 				else if (arg[0] == "#")          this.id   = arg.slice(1);
 			}
@@ -55,11 +56,10 @@ class Component {
 	/**
 	* Do we have an argument with the given name?
 	* @param  {string}name The name of the argument. Note arguments are case-insensitive.
-	* @param  {array}args All of the arguments.
 	* @return {boolean} <code>true</code> if we have it, <code>false</code> if we do not.
 	*/
-	hasArg(name, args) {
-		for (let arg of args) {
+	hasArg(name) {
+		for (let arg of this.args) {
 			if (isString(arg) && arg.toLowerCase() == name.toLowerCase()) return true;
 		}
 		return false;
@@ -87,10 +87,13 @@ class Component {
 			if (this.animations[i].isDone()) this.animations.splice(i, 1);
 		}
 		
-		// Tick children
-		for (let child of this.children) css += child.onTick();
+		let dedupeCSS = new Set();
+		dedupeCSS.add(css);
 		
-		return css;
+		// Tick children
+		for (let child of this.children) dedupeCSS.add(child.onTick());
+		
+		return Array.from(dedupeCSS).reduce((acc, val)=>acc = acc + val, "");
 	}
 	
 	/**

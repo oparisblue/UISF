@@ -12,7 +12,7 @@ components["label"] = class ComponentLabel extends Component {
 	constructor() {
 		super(arguments);
 		this.canHaveChildren = false;
-		this.isTitle = this.hasArg("title", arguments);
+		this.isTitle = this.hasArg("title");
 		this.domNode = document.createElement("span");
 		this.domNode.id = this.id;
 		this.prevData = null;
