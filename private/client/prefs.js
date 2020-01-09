@@ -17,6 +17,6 @@ function getPreference(preference) {
 * @param {any}value The new value of the preference that the user changes.
 */
 function setPreference(preference, value) {
-	USER_PREFERENCES.[preference.key] = value;
-	request(Network.UPDATE_PREFS, {"prefs":JSON.stringify(USER_PREFERENCES})); // TODO: Add confermation message once server had processed
+	USER_PREFERENCES[preference.key] = value;
+	request(Network.UPDATE_PREFS, {"prefs":JSON.stringify(USER_PREFERENCES)}); // TODO: Add confermation message once server had processed
 }
