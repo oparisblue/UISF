@@ -1,6 +1,6 @@
 /**
 * An empty component, used purely as a container for other elements.
-* @author Orlando
+* @author Simon Watson
 */
 components["gridRow"] = class ComponentRow extends Component {
 	

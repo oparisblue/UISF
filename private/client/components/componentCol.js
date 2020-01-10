@@ -1,6 +1,6 @@
 /**
 * An empty component, used purely as a container for other elements.
-* @author Orlando
+* @author Simon Watson
 */
 components["gridCol"] = class ComponentCol extends Component {
 	
@@ -16,11 +16,12 @@ components["gridCol"] = class ComponentCol extends Component {
 	* @override
 	*/
 	addChild(child) {
-		let reg = /flex(\d+)/;
+		let regFlex = /flex(\d+)/;
+		
 		for (let arg of child.args) {
 			if (isString(arg)) {
-				if (reg.test(arg)) this.domNode.style.flex = parseInt(reg.exec(arg)[1]);
-				else if (arg.toLowerCase() == "nocol") {
+				if (regFlex.test(arg)) this.domNode.style.flex = parseInt(regFlex.exec(arg)[1]);
+				else if (arg.toLowerCase() == "nocol") { 
 					this.noCol = true;
 					return;
 				}

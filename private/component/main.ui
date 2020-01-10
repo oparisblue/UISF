@@ -1,1 +1,10 @@
 topTabBar
+grid 2x4 gutter24
+	label "hello"
+	label "hello"
+	label "there"
+	label "hello"
+	label "jedi"
+	label "hello"
+	label "jedi"
+	label "hello"

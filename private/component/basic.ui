@@ -1,7 +1,0 @@
-grid 2x3
-	label "hello" noCol
-	label "hello"
-	label "there"
-	label "hello"
-	label "jedi"
-	label "hello"

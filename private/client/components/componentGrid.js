@@ -15,12 +15,10 @@ components["grid"] = class ComponentGrid extends Component {
 		this.cR = 0;
 		this.cC = 0;
 		
-		console.log(this.args);
-		
-		let reg = /(\d+)[xX](\d+)/;
+		let regGrid = /(\d+)[xX](\d+)/;
 		for (let arg of this.args) {
-			if (isString(arg) && reg.test(arg)) {
-				let groups = reg.exec(arg).splice(1).map((x)=>parseInt(x));
+			if (isString(arg) && regGrid.test(arg)) {
+				let groups = regGrid.exec(arg).splice(1).map((x)=>parseInt(x));
 				console.log(groups);
 				this.rows = groups[0];
 				this.cols = groups[1];
@@ -34,10 +32,18 @@ components["grid"] = class ComponentGrid extends Component {
 	*/
 	addChild(child) {
 		if (child == null) return;
-		
 		if (this.cR == this.rows) throw new Error("Maximum rows x columns reached!");
 		
+		let regGutter = /gutter(\d+)/;
 		let col = new components["gridCol"]();
+		
+		for (let arg of this.args) {
+			if (isString(arg) && regGutter.test(arg)) {
+				let gutterValue = regGutter.exec(arg)[1];
+				col.domNode.style.margin = `0 ${gutterValue}px 0 ${gutterValue}px`;
+			}
+		}
+		
 		col.addChild(child);
 		this.currentRow.addChild(col);
 		
