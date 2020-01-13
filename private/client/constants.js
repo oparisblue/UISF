@@ -1,22 +1,27 @@
 /**
+* Settings constants
 * @author Simon Watson
 */
 
 const Constants = {
 	DARK: {
-		BACKGROUND_ONE: "",
-		BACKGROUND_TWO: "",
-		BACKGROUND_THREE: "",
-		BACKGROUND_FOUR: "",
-		HIGHLIGHT: "",
+		BACKGROUND: [
+			"", // Darkest
+			"",
+			"",
+			"",
+			"", // Lightest
+		],
 		TEXT: "",
 	},
 	LIGHT: {
-		BACKGROUND_ONE: "",
-		BACKGROUND_TWO: "",
-		BACKGROUND_THREE: "",
-		BACKGROUND_FOUR: "",
-		HIGHLIGHT: "",
+		BACKGROUND: [
+			"", // Darkest
+			"",
+			"",
+			"",
+			"", // Lightest
+		],
 		TEXT: "",
 	},
 	BORDER_RADIUS: "",
