@@ -31,13 +31,17 @@ const Constants = {
 };
 
 function getColour(value) {
-	return Constants[window.matchMedia("(prefers-color-scheme: dark)") ? "DARK" : "LIGHT"].BACKGROUND[value];
+	return Constants[window.matchMedia("(prefers-color-scheme: dark)").matches ? "DARK" : "LIGHT"].BACKGROUND[value];
 }
 
 function getAccentColour() {
-	
+	return "#f44336";
 }
 
 function getAccentHighlight() {
-	
+	return "#ef9a9a";
+}
+
+function getAccentShadow() {
+	return "#d32f2f";
 }

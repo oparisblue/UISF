@@ -1,5 +1,16 @@
 function getDefaultCSS() {
 	return `
+	
+	body, html {
+		height:100%;
+		padding:0;
+		margin:0;
+		font-family:"Trebuchet MS";
+		box-sizing:border-box;
+		overflow:hidden;
+		background-color:${getColour(0)};
+	}
+	
 	button, input[type="checkbox"], input[type="radio"] {
 		-webkit-appearance:none;
 		-moz-appearance:none;
@@ -7,7 +18,7 @@ function getDefaultCSS() {
 		appearance:none;
 		min-height:22px;
 		min-width:22px;
-		font-family:${Constants.FONT_FAMILLY}
+		font-family:${Constants.FONT_FAMILY};
 		background-color:${getColour(3)};
 		border-radius:5px;
 		outline:none;
@@ -32,7 +43,13 @@ function getDefaultCSS() {
 	}
 	
 	:focus {
-		box-shadow:0 2px 10px rgba(0, 0, 0, 0.1), 0 0 0 4px ${getAccentColour()}88;
+		box-shadow:0 2px 10px rgba(0, 0, 0, 0.1), 0 0 0 4px ${getAccentColour()}44;
+	}
+	
+	:disabled {
+		opacity:0.5;
+		cursor:default;
+		pointer-events:none;
 	}
 	`;	
 }
