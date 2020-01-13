@@ -1,5 +1,5 @@
 /**
-* An empty component, used purely as a container for other elements.
+* Makes the parent modal element ready for content.
 * @author Simon Watson
 */
 
@@ -61,7 +61,7 @@ components["modal"] = class ComponentModal extends Component {
 		}
 		
 		.modalContent {
-			background-color: white;
+			background-color: ${getColour(1)};
 			min-width: 400px;
 			min-height: 300px;
 			z-index: 1;
