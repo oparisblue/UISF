@@ -9,14 +9,18 @@ function parseUIToComponent(ui, id) {
 	for (let line of lines) {
 		
 		// Check how indented the current line is
-		let regex = /\t/g;
+		let regex = /\t+/g;
 		let indents = 1;
-		while ((result = regex.exec(line))) indents++;
+		
+		// Count how many tab characters there are at the start of this line
+		let tabs = regex.exec(line);
+		if (tabs != null) indents += tabs[0].length;
+		
 		// If there are more indents than the current indent length, add the previous component as the parent
 		if (indents > stack.length) stack.push(prevComp);
 		// Otherwise if there are less indents, remove that many elements from the top of the stack
-		else for (let i = stack.length; i > indents; i++) stack.pop();
-		line = line.replace(/\t/g, "");
+		else for (let i = stack.length; i > indents; i--) stack.pop();
+		line = line.replace(regex, "");
 		
 		// Parse the line to a set of parameters
 		let params = [""];
