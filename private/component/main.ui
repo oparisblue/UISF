@@ -1,4 +1,5 @@
 topTabBar
+button "hello" ->test
 modal
 grid 2x4
 	label "hello"

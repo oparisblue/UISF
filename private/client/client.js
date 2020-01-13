@@ -30,6 +30,7 @@ let prevCSS = ``;
 function render() {
 	
 	let css = new Set();
+	css.add(getDefaultCSS());
 	for (let component of activeComponents) css.add(component.onTick());
 	let dedupeCSS = Array.from(css).reduce((acc, val)=>acc = acc + val, "");
 	if (dedupeCSS != prevCSS) document.getElementById("css").innerHTML = dedupeCSS

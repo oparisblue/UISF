@@ -15,12 +15,14 @@ class Component {
 		this.args = arguments[0];
 		
 		this.id = "comp" + (Component.nextID++);
-		this.data = ``;
+		this.data = [];
+		this.func = null;
 		
 		if (this.args.length >= 1) {
 			for (let arg of this.args) {
-				if (arg.constructor == CompData) this.data = arg.data;
-				else if (arg[0] == "#")          this.id   = arg.slice(1);
+				if (arg.constructor == CompData)  this.data.push(arg.data);
+				else if (arg[0] == "#")           this.id   = arg.slice(1);
+				else if (arg.slice(0, 2) == "->") this.func = arg.slice(2);
 			}
 		}
 		
