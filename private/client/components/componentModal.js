@@ -1,6 +1,7 @@
 /**
 * Makes the parent modal element ready for content.
 * @author Simon Watson
+* @author Orlando
 */
 
 function topModal() {
@@ -26,7 +27,15 @@ components["modal"] = class ComponentModal extends Component {
 		
 		this.children.push(this.modalContent);
 		
+		this.finisher = this.func;
+		
 		modals.push(this);
+	}
+	
+	complete(state) {
+		modals.pop();
+		this.remove();
+		fireEvent("modalClosed" + this.id, state);
 	}
 	
 	/**
@@ -70,4 +79,22 @@ components["modal"] = class ComponentModal extends Component {
 		`;
 		return this.doDefaultRender(css);
 	}
+}
+
+/**
+*
+*/
+function modal(ui) {
+	return new Promise((resolve, _)=>{
+		// Create the modal
+		let modal = new components["modal"]("->modalClosed");
+		// Parse the ui screen and add it to the modal
+		modal.addChild(parseUIToComponent(ui, "modalContent" + Component.nextID++));
+		// Put the modal on the page
+		activeComponents[2].addChild(modal);
+		// Resolve the promise when closed
+		subscribeEvent("modalClosed" + modal.id, (state)=>{
+			resolve(state);
+		});
+	});
 }

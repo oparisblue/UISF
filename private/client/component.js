@@ -108,7 +108,7 @@ class Component {
 	* @returns {string} CSS for the component.
 	*/
 	onTick() {
-		return "";
+		return this.doDefaultRender("");
 	}
 	
 }
