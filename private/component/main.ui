@@ -1,2 +1,1 @@
-topTabBar
-button "hello" ->test #btn
+button default "Open Modal" ->openModal

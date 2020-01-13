@@ -3,18 +3,9 @@
 * @author Orlando
 */
 components["empty"] = class ComponentEmpty extends Component {
-	
 	constructor() {
 		super(arguments);
 		this.domNode = document.createElement("div");
 		this.domNode.id = this.id;
 	}
-	
-	/**
-	* @override
-	*/
-	onTick() {
-		return this.doDefaultRender("");
-	}
-	
 }

@@ -15,7 +15,7 @@ components["button"] = class ComponentButton extends Component {
 		this.prev = [null, null, null];
 		
 		this.domNode.addEventListener("click", ()=>{
-			fireEvent(this.func);
+			fireEvent(this.func, this);
 		});
 	}
 	

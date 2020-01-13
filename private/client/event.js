@@ -15,6 +15,12 @@ function subscribeEvent(name, func) {
 * Fire the given event, calling all event handlers registered on it.
 * @param name The name of the event.
 */
-function fireEvent(name) {
-	if (events.hasOwnProperty(name)) for (let handler of events[name]) handler();
+function fireEvent(name, ...props) {
+	if (events.hasOwnProperty(name)) for (let handler of events[name]) handler(...props);
 }
+
+// Default events
+
+subscribeEvent("modalButtonClicked", (button)=>{
+	modals[modals.length - 1].complete(button.order);
+});
