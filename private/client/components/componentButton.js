@@ -2,7 +2,7 @@
 * Represents a button which can be clicked by the user.
 * @author Orlando
 */
-components["button"] = class ComponentEmpty extends Component {
+components["button"] = class ComponentButton extends Component {
 	
 	constructor() {
 		super(arguments);
@@ -12,7 +12,7 @@ components["button"] = class ComponentEmpty extends Component {
 		this.isDefault = this.hasArg("default");
 		this.isDisabled = this.hasArg("disabled");
 		this.name = this.data[0] == null ? "" : this.data[0];
-		this.prevName = "";
+		this.prev = [null, null, null];
 		
 		this.domNode.addEventListener("click", ()=>{
 			fireEvent(this.func);
@@ -24,14 +24,12 @@ components["button"] = class ComponentEmpty extends Component {
 	*/
 	onTick() {
 		
-		if (this.prevName != this.name) {
+		if (this.prev[0] != this.name || this.prev[1] != this.isDefault || this.prev[2] != this.isDisabled) {
 			this.domNode.innerHTML = this.name;
-			this.prevName = this.name;
+			this.domNode.setAttribute("class", this.isDefault ? "buttonDefault" : "");
+			this.domNode.disabled = this.isDisabled;
+			this.prev = [this.name, this.isDefault, this.isDisabled];
 		}
-		
-		let css = `
-		
-		`;
 		
 		return this.doDefaultRender("");
 	}
