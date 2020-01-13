@@ -16,13 +16,15 @@ components["modal"] = class ComponentModal extends Component {
 		this.domNode.id = this.id;
 		this.domNode.classList.add("modalParent");
 		
-		let modalShade = document.createElement("div");
-		modalShade.classList.add("modalShade");
-		this.domNode.appendChild(modalShade);
+		this.modalShade = new components["empty"]();
+		this.modalShade.domNode.classList.add("modalShade");
+		this.domNode.appendChild(this.modalShade.domNode);
 		
-		let modalContent = document.createElement("div");
-		modalContent.classList.add("modalContent");
-		this.domNode.appendChild(modalContent);
+		this.modalContent = new components["empty"]();
+		this.modalContent.domNode.classList.add("modalContent");
+		this.domNode.appendChild(this.modalContent.domNode);
+		
+		this.children.push(this.modalContent);
 		
 		modals.push(this);
 	}
@@ -30,10 +32,9 @@ components["modal"] = class ComponentModal extends Component {
 	/**
 	* @override
 	*/
-	// addChild(child) {
-	// 
-	// }
-	
+	addChild(child) {
+		this.modalContent.addChild(child);
+	}
 	/**
 	* @override
 	*/
