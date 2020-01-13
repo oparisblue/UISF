@@ -76,7 +76,7 @@ components["topTabBar"] = class ComponentTopTabBar extends Component {
 				tab != draggingTab  &&
 				draggingTab != null &&
 				!tab.classList.contains("transitioning") &&
-				tab.offsetLeft < draggingTab.offsetLeft &&
+				tab.offsetLeft < draggingTab.offsetLeft + (draggingTab.offsetWidth / 2) &&
 				draggingTab.offsetLeft <= tab.offsetLeft + (tab.offsetWidth / 2)
 			) {
 				// Swap

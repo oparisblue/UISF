@@ -16,15 +16,16 @@ components["label"] = class ComponentLabel extends Component {
 		this.domNode = document.createElement("span");
 		this.domNode.id = this.id;
 		this.prevData = null;
+		this.label = this.data[0] == null ? "" : this.data[0];
 	}
 	
 	/**
 	* @override
 	*/
 	onTick() {
-		if (this.prevData != this.data) {
-			this.domNode.innerHTML = this.data;
-			this.prevData = this.data;
+		if (this.prevData != this.label) {
+			this.domNode.innerHTML = this.label;
+			this.prevData = this.label;
 		}
 		let css = this.isTitle ? `#${this.id}{font-weight:bold;}` : ``;
 		return this.doDefaultRender(css);
