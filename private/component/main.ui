@@ -1,2 +1,12 @@
 topTabBar
 button "hello" ->test
+modal
+grid 2x4
+	label "hello"
+	label "hello"
+	label "there"
+	label "hello"
+	label "jedi"
+	label "hello"
+	label "jedi"
+	label "hello"
