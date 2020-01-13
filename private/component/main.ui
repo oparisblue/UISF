@@ -1,5 +1,6 @@
 topTabBar
-grid 2x4 gutter24
+modal
+grid 2x4
 	label "hello"
 	label "hello"
 	label "there"
