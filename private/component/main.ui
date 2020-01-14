@@ -1,1 +1,2 @@
 button default "Open Modal" ->openModal
+button "Try Animation" ->tryAnimation

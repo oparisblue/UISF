@@ -31,7 +31,15 @@ const Constants = {
 };
 
 function getColour(value) {
-	return Constants[window.matchMedia("(prefers-color-scheme: dark)").matches ? "DARK" : "LIGHT"].BACKGROUND[value];
+	return Constants[isDarkMode() ? "DARK" : "LIGHT"].BACKGROUND[value];
+}
+
+function isDarkMode() {
+	return window.matchMedia("(prefers-color-scheme: dark)").matches;
+}
+
+function getTextColour() {
+	return Constants[isDarkMode() ? "DARK" : "LIGHT"].TEXT;
 }
 
 function getAccentColour() {

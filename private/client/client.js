@@ -27,7 +27,12 @@ window.onload = ()=>{
 
 let prevCSS = ``;
 
+let timeLastFrame = Date.now();
+
 function render() {
+	let timeThisFrame = Date.now();
+	Animation.deltaTime = timeThisFrame - timeLastFrame;
+	timeLastFrame = timeThisFrame;
 	
 	let css = new Set();
 	css.add(getDefaultCSS());

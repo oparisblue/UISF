@@ -18,3 +18,7 @@ class Vector {
 		this.y = y;
 	}
 }
+
+function remap(val, initMin, initMax, newMin, newMax) {
+	return (val - initMin) * (newMax - newMin) / (initMax - initMin) + newMin;
+}

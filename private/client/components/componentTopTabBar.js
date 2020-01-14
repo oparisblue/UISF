@@ -99,7 +99,12 @@ components["topTabBar"] = class ComponentTopTabBar extends Component {
 let draggingTab = null;
 let draggingTabInitialPosition;
 
+let mouseX;
+let mouseY;
+
 window.addEventListener("mousemove", (ev)=>{
+	mouseX = ev.clientX;
+	mouseY = ev.clientY;
 	if (draggingTab != null) {
 		draggingTab.style.left = (ev.clientX - draggingTabInitialPosition.x) + "px";
 	}

@@ -30,6 +30,13 @@ class Component {
 	}
 	
 	/**
+	* Add an animation to this component. It will automatically be removed when it finishes.
+	*/
+	addAnimation(animation) {
+		this.animations.push(animation);
+	}
+	
+	/**
 	* Add a child to the component. Note that some elements cannot have children (e.g. labels).
 	* @param {component}child The child to add.
 	*/
@@ -86,7 +93,10 @@ class Component {
 		for (let i = this.animations.length - 1; i >= 0; i--) {
 			css = this.animations[i].onTick(css, this);
 			// Remove an animation which has finished
-			if (this.animations[i].isDone()) this.animations.splice(i, 1);
+			if (this.animations[i].isDone()) {
+				this.animations[i].onDone(this);
+				this.animations.splice(i, 1);
+			}
 		}
 		
 		let dedupeCSS = new Set();

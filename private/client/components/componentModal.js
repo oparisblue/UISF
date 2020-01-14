@@ -65,16 +65,20 @@ components["modal"] = class ComponentModal extends Component {
 			left: 0;
 			width: 100%;
 			height: 100%;
-			background-color: #0003;
+			background-color: #0008;
 			z-index: 0;
 		}
 		
 		.modalContent {
 			background-color: ${getColour(1)};
 			min-width: 400px;
-			min-height: 300px;
 			z-index: 1;
 			box-shadow:0 20px 30px #0004;
+			box-sizing:border-box;
+			padding:10px;
+			border-radius:${Constants.BORDER_RADIUS};
+			border-top:solid 1px ${getColour(4)};
+			border-bottom:solid 1px ${getColour(0)};
 		}
 		`;
 		return this.doDefaultRender(css);

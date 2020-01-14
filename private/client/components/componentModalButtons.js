@@ -7,6 +7,7 @@ components["modalButtons"] = class ComponentModalButtons extends Component {
 		super(arguments);
 		this.domNode = document.createElement("div");
 		this.domNode.id = this.id;
+		this.domNode.style.textAlign = "right";
 		
 		let hasAssignedDefault = false;
 		let isNextDefault = false;

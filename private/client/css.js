@@ -9,6 +9,7 @@ function getDefaultCSS() {
 		box-sizing:border-box;
 		overflow:hidden;
 		background-color:${getColour(0)};
+		color:${getTextColour()};
 	}
 	
 	button, input[type="checkbox"], input[type="radio"] {
