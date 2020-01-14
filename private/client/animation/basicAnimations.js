@@ -24,7 +24,7 @@ class BasicAnimation extends Animation {
 		css += `#${comp.id} {`;
 			
 		let num = Math.abs((this.reverse ? 1 : 0) - this.timingFunc(this.ms / this.duration));
-		
+		console.log(this.json.animation)
 		switch (this.json.animation) {
 			case "fade" :
 				css += `opacity: ${num} !important;`;

@@ -26,6 +26,7 @@ components["modal"] = class ComponentModal extends Component {
 		this.domNode.appendChild(this.modalContent.domNode);
 		
 		this.children.push(this.modalContent);
+		this.children.push(this.modalShade);
 		
 		this.finisher = this.func;
 		
@@ -34,7 +35,15 @@ components["modal"] = class ComponentModal extends Component {
 	
 	complete(state) {
 		modals.pop();
-		this.remove();
+		
+		let animation = new BasicAnimation({animation: "pop", timingFunc: Easing.easeIn, duration: 100, from: 0.5, to: 1, reverse: true});
+		animation.onDone = ()=>{
+			this.remove();
+		}
+		this.modalContent.addAnimation(animation);
+		this.modalShade.addAnimation(new BasicAnimation({animation: "fade", duration: 100, timingFunc: Easing.easeOut, reverse: true}));
+		
+		//this.remove();
 		fireEvent("modalClosed" + this.id, state);
 	}
 	
@@ -94,6 +103,9 @@ function modal(ui) {
 		let modal = new components["modal"]("->modalClosed");
 		// Parse the ui screen and add it to the modal
 		modal.addChild(parseUIToComponent(ui, "modalContent" + Component.nextID++));
+		// Animate the modal
+		modal.modalContent.addAnimation(new BasicAnimation({animation: "pop", timingFunc: Easing.bounceIn, duration: 500, from: 0.5, to: 1}));
+		modal.modalShade.addAnimation(new BasicAnimation({animation: "fade", duration: 100, timingFunc: Easing.easeOut}));
 		// Put the modal on the page
 		activeComponents[2].addChild(modal);
 		// Resolve the promise when closed
