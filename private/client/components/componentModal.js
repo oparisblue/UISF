@@ -1,14 +1,11 @@
 /**
-* Makes the parent modal element ready for content.
+* Implements Modal windows.
 * @author Simon Watson
 * @author Orlando
 */
 
-function topModal() {
-	return modals.length == 0 ? null : modals[modals.length - 1];
-}
-
 let modals = [];
+
 components["modal"] = class ComponentModal extends Component {
 	
 	constructor() {
@@ -95,7 +92,15 @@ components["modal"] = class ComponentModal extends Component {
 }
 
 /**
-*
+* Get the currently open top modal window.
+*/
+function topModal() {
+	return modals.length == 0 ? null : modals[modals.length - 1];
+}
+
+/**
+* Creates a new modal window, containing the given UI view.
+* Returns a promise which is resolved when the modal is closed.
 */
 function modal(ui) {
 	return new Promise((resolve, _)=>{
@@ -113,4 +118,65 @@ function modal(ui) {
 			resolve(state);
 		});
 	});
+}
+
+/**
+* Buttons which are displayed at the bottom of a modal.
+*/
+components["modalButtons"] = class ComponentModalButtons extends Component {
+	constructor() {
+		super(arguments);
+		this.domNode = document.createElement("div");
+		this.domNode.id = this.id;
+		this.domNode.style.textAlign = "right";
+		
+		let hasAssignedDefault = false;
+		let isNextDefault = false;
+		
+		for (let i = 0; i < this.args.length; i++) {
+			let arg = this.args[i];
+			if (arg.constructor == CompData) {
+				let button = new components["button"](arg, "->modalButtonClicked");
+				button.isDefault = isNextDefault || (i == this.args.length - 1 && !hasAssignedDefault);
+				button.order = i;
+				this.addChild(button);
+				isNextDefault = false;
+			}
+			else if (arg.toLowerCase() == "default") {
+				isNextDefault = true;
+				hasAssignedDefault = true;
+			}
+		}
+	}
+}
+
+/**
+* Creates a new title component which is displayed at the top of the modal.
+*/
+components["modalTitle"] = class ComponentModalTitle extends components["label"] {
+	constructor() {
+		super(...arguments);
+		this.domNode.classList.add("modalTitle");
+	}
+	
+	/**
+	* @override
+	*/
+	onTick() {
+		this.isTitle = false;
+		return super.onTick() + `.modalTitle {
+			width:calc(100% + 10px);
+			display:block;
+			position:relative;
+			left:-10px;
+			top:-10px;
+			padding:5px;
+			border-radius:${Constants.BORDER_RADIUS} ${Constants.BORDER_RADIUS} 0 0;
+			background-color:${getColour(3)};
+			border-bottom:${getColour(1)};
+			text-align:center;
+		}
+		`;
+	}
+	
 }
