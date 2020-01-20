@@ -1,5 +1,5 @@
 /**
-* An empty component, used purely as a container for other elements.
+* A row component ment for you in the grid component.
 * @author Simon Watson
 */
 components["gridRow"] = class ComponentRow extends Component {
