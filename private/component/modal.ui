@@ -1,4 +1,7 @@
-modalTitle "Hello There!"
-grid 2x1
-	label "General Kenobi!"
-	modalButtons "Cancel" "OK"
+modalTitle
+grid 1x2
+	empty
+	grid 2x1 flex2
+		label "Oh no!" title
+		label "You did something wrong."
+modalButtons "Cancel" "OK"

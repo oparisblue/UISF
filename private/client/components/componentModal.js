@@ -71,7 +71,7 @@ components["modal"] = class ComponentModal extends Component {
 			left: 0;
 			width: 100%;
 			height: 100%;
-			background-color: #0008;
+			background-color: #000a;
 			z-index: 0;
 		}
 		
@@ -165,7 +165,7 @@ components["modalTitle"] = class ComponentModalTitle extends components["label"]
 	onTick() {
 		this.isTitle = false;
 		return super.onTick() + `.modalTitle {
-			width:calc(100% + 10px);
+			width:calc(100% + 20px);
 			display:block;
 			position:relative;
 			left:-10px;
@@ -175,6 +175,8 @@ components["modalTitle"] = class ComponentModalTitle extends components["label"]
 			background-color:${getColour(3)};
 			border-bottom:${getColour(1)};
 			text-align:center;
+			box-sizing:border-box;
+			height:29px;
 		}
 		`;
 	}

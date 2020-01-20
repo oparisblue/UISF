@@ -19,7 +19,6 @@ components["grid"] = class ComponentGrid extends Component {
 		for (let arg of this.args) {
 			if (isString(arg) && regGrid.test(arg)) {
 				let groups = regGrid.exec(arg).splice(1).map((x)=>parseInt(x));
-				console.log(groups);
 				this.rows = groups[0];
 				this.cols = groups[1];
 			}

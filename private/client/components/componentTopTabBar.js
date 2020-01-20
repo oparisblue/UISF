@@ -38,26 +38,43 @@ components["topTabBar"] = class ComponentTopTabBar extends Component {
 	onTick() {
 		let css = `
 			#${this.id} {
-				background-color:${getAccentColour()};
+				background-color:${getColour(1)};
 				width:100%;
-				height:45px;
-				color:#fff;
+				height:35px;
+				color:${getColour()};
 				user-select:none;
 			}
 			.topTab {
-				background-color:${getAccentShadow()};
+				background-color:${getColour(1)};
 				cursor:pointer;
 				box-sizing:border-box;
 				padding:10px;
-				height:45px;
+				height:35px;
 				display:flex;
 				align-items:center;
 				margin-right:2px;
 				min-width:100px;
 				position:absolute;
+				border-radius:${Constants.BORDER_RADIUS} ${Constants.BORDER_RADIUS} 0 0;
+				border-top:solid 1px transparent;
+			}
+			.topTab:not(.topTabSelected)::after, .topTabSelected::before {
+				content:"";
+				position:absolute;
+				width:1px;
+				height:70%;
+				top:15%;
+				right:0;
+				background-color:${getColour(4)};
+			}
+			.topTabSelected::before {
+				left:-1px;
+				background-color:${getColour(1)};
 			}
 			.topTabSelected {
-				 background-color:${getColour(0)};
+				 background-color:${getAccentColour()};
+				 border-top:solid 1px ${getAccentHighlight()};
+				 color:${Constants.DARK.TEXT};
 			}
 			.topTab:not(.topTabSelected) {
 				transition:left 0.1s linear;

@@ -42,6 +42,10 @@ function getTextColour() {
 	return Constants[isDarkMode() ? "DARK" : "LIGHT"].TEXT;
 }
 
+function getOppositeTextColour() {
+	return Constants[!isDarkMode() ? "DARK" : "LIGHT"].TEXT;
+}
+
 function getAccentColour() {
 	return "#f44336";
 }

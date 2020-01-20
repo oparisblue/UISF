@@ -1,0 +1,16 @@
+Formats
+
+event listener
+{"event": "clicked", "to": 2, "method": "run"}
+
+outlet
+{"outlet": "checked", "to": 2, "inlet": "disabled"}
+
+field
+{"name": "Disabled", "description": "Is the button disabled?", "type": "bool", "default": false, "value": false}
+
+events
+{"name": "Pressed", "description": "Called when the button is pressed."}
+
+method
+{"name": "Run", "description": "Call this method to run the applicator action.", "func": ()=>{}}
