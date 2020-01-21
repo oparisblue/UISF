@@ -30,6 +30,7 @@
 		<title>Scaffold</title>
 	</head>
 	<body>
+		<div id="popUp" class="popUp" style="display: none;"></div>
 		<div id="main" onmousedown="editSelectNode(null)" oncontextmenu="return false;"></div>
 		<div id="inspector">
 			<div class="editorTabs">

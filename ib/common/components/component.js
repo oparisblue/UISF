@@ -14,6 +14,7 @@ class Component {
 		this.fields  = {};
 		this.events  = {};
 		this.actions = {};
+		this.tags = [];
 		
 		// Build the dom node wrapper for the element
 		
@@ -126,16 +127,31 @@ class Component {
 		this.id = Component.nextId++;
 	}
 	
+	// Functions for tags
+	/**
+	* Adds the tagId to the components tags array.
+	* @param {any}id The id of the tag
+	*/
+	addTag(id) {
+		if (!this.tags.includes(id)) this.tags.push(id);
+	}
+	
+	/**
+	* Removes the tagId from the components tags array.
+	* @param {any}id The id of the tag
+	*/
+	removeTag(id) {
+		if (this.tags.includes(id)) this.tags.splice(this.tags.indexOf(id), 1);
+	}
+	
 	
 	// Abstract
-	
 	
 	getEditorName()        { return ""; }
 	getEditorDescription() { return ""; }
 	getDefaultWidth()      { return 0;  }
 	getDefaultHeight()     { return 0;  }
 	onTick()               {            }
-	
 	
 	// Concrete
 	
@@ -216,38 +232,106 @@ class Component {
 		
 		let elem = document.createElement("div");
 		
-		if (fields.length == 0) {
+		let title = document.createElement("div");
+		title.classList.add("editorTitle");
+		title.innerHTML = `<strong>${this.getEditorName()}</strong><br><small>${this.getEditorDescription()}</small>`;
+		elem.appendChild(title);
+		
+		// Size position
+		let constraintsContainer = document.createElement("div");
+		constraintsContainer.classList.add("editorSection");
+		constraintsContainer.insertAdjacentHTML("beforeend", "<strong>Constraints</strong>");
+		
+		elem.appendChild(constraintsContainer);
+		
+		// Tags
+		let tagsContainer = document.createElement("div");
+		tagsContainer.classList.add("editorSection");
+		tagsContainer.insertAdjacentHTML("beforeend", "<strong>Tags</strong>");
+		
+		let tagsSection = document.createElement("div");
+		tagsSection.classList.add("tagsSection");
+		
+		for (let i = 0; i < this.tags.length; i++) {
+			let tag = document.createElement("div");
+			tag.classList.add("tag", `tag${this.tags[i]}`);
+			tag.innerText = Tag.tags[this.tags[i]].name;
+			tag.style.backgroundColor = Tag.tags[this.tags[i]].getColour();
 			
-			elem.setAttribute("style", "position:absolute;left:50%;top:50%;transform:translate(-50%, -50%);text-align:center;");
-			elem.innerHTML = `<i class="mdi mdi-information-outline"></i><br>No Properties!`;
+			let tagClose = document.createElement("i");
+			tagClose.classList.add("mdi", "mdi-close-circle");
+			tagClose.addEventListener("click", ()=> {
+				this.removeTag(this.tags[i]);
+				editSelectNode(this);
+			});
+			tag.appendChild(tagClose);
 			
+			tagsSection.appendChild(tag);
 		}
-		else {
-			let title = document.createElement("div");
-			title.classList.add("editorTitle");
-			title.innerHTML = `<strong>${this.getEditorName()}</strong><br><small>${this.getEditorDescription()}</small>`;
-			elem.appendChild(title);
+		
+		let addTagButton = document.createElement("button");
+		addTagButton.classList.add("addTagButton");
+		addTagButton.innerText = "+";
+		addTagButton.addEventListener("click", ()=> {
+			let popUpWidth = 200;
+			let popUpHeight = 100;
+			let rect = addTagButton.getBoundingClientRect();
+			let popUp = document.getElementById("popUp");
 			
-			let table = document.createElement("table");
-			let tbody = document.createElement("tbody");
-			for (let field of fields) {
-				let data = this.fields[field];
-				let left = document.createElement("td");
-				left.innerHTML = data.name + ":";
-				left.title = data.description;
-				let right = document.createElement("td");
-				right.appendChild(data.value.getInspector(field, this));
-				let row = document.createElement("tr");
-				row.appendChild(left);
-				row.appendChild(right);
-				tbody.appendChild(row);
+			popUp.style.left = `${rect.left + ((rect.width - popUpWidth) / 2)}px`;
+			popUp.style.top = `${rect.top + rect.height + 20}px`;
+			popUp.style.display = "block";
+			popUp.style.width = `${popUpWidth}px`;
+			popUp.style.height = `${popUpHeight}px`;
+			
+			let tagsList = document.createElement("datalist");
+			tagsList.id = "tagOptions";
+			let tasgListInput = document.createElement("input");
+			tasgListInput.setAttribute("list", "tagOptions");
+			for (let k of Object.keys(Tag.tags)) {
+				if (!this.tags.includes(k)) {
+					let option = document.createElement("option");
+					option.value = Tag.tags[k].name;
+					option.setAttribute("data-id", Tag.tags[k].id);
+					tagsList.appendChild(option);
+				}
 			}
-			table.appendChild(tbody);
-			elem.appendChild(table);
+			popUp.appendChild(tasgListInput);
+			popUp.appendChild(tagsList);
+			editSelectNode(this);
+			
+			// this.addTag(new AnyElementTag("Name").id);
+		});
+		tagsSection.appendChild(addTagButton);
+		tagsContainer.appendChild(tagsSection);
+		
+		elem.appendChild(tagsContainer);
+		
+		// Fields
+		let fieldsContainer = document.createElement("div");
+		fieldsContainer.classList.add("editorSection");
+		fieldsContainer.insertAdjacentHTML("beforeend", "<strong>Fields</strong>");
+		
+		let table = document.createElement("table");
+		let tbody = document.createElement("tbody");
+		for (let field of fields) {
+			let data = this.fields[field];
+			let left = document.createElement("td");
+			left.innerHTML = data.name + ":";
+			left.title = data.description;
+			let right = document.createElement("td");
+			right.appendChild(data.value.getInspector(field, this));
+			let row = document.createElement("tr");
+			row.appendChild(left);
+			row.appendChild(right);
+			tbody.appendChild(row);
 		}
+		
+		table.appendChild(tbody);
+		fieldsContainer.appendChild(table);
+		elem.appendChild(fieldsContainer);
 		
 		return elem;
-		
 	}
 	
 	forceRefresh() {
