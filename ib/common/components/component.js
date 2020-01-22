@@ -262,7 +262,7 @@ class Component {
 			tagClose.classList.add("mdi", "mdi-close-circle");
 			tagClose.addEventListener("click", ()=> {
 				this.removeTag(this.tags[i]);
-				editSelectNode(this);
+				rebuildInspector();
 			});
 			tag.appendChild(tagClose);
 			
@@ -273,6 +273,7 @@ class Component {
 		addTagButton.classList.add("addTagButton");
 		addTagButton.innerText = "+";
 		addTagButton.addEventListener("click", ()=> {
+			$("#overlay").style.display = "block";
 			let popUpWidth = 200;
 			let popUpHeight = 100;
 			let rect = addTagButton.getBoundingClientRect();
@@ -281,13 +282,18 @@ class Component {
 			popUp.style.left = `${rect.left + ((rect.width - popUpWidth) / 2)}px`;
 			popUp.style.top = `${rect.top + rect.height + 20}px`;
 			popUp.style.display = "block";
-			popUp.style.width = `${popUpWidth}px`;
-			popUp.style.height = `${popUpHeight}px`;
+			popUp.style.minWidth = `${popUpWidth}px`;
+			popUp.style.minHeight = `${popUpHeight}px`;
+			
+			popUp.insertAdjacentHTML("beforeend", "<strong>Add an existing tag</strong><br>");
 			
 			let tagsList = document.createElement("datalist");
 			tagsList.id = "tagOptions";
+			
 			let tasgListInput = document.createElement("input");
 			tasgListInput.setAttribute("list", "tagOptions");
+			tasgListInput.setAttribute("type", "text");
+			tasgListInput.style.marginTop = "5px";
 			for (let k of Object.keys(Tag.tags)) {
 				if (!this.tags.includes(k)) {
 					let option = document.createElement("option");
@@ -295,13 +301,91 @@ class Component {
 					option.setAttribute("data-id", Tag.tags[k].id);
 					tagsList.appendChild(option);
 				}
+			}			
+			
+			let newTagName = document.createElement("input");
+			newTagName.setAttribute("type", "text");
+			newTagName.style.marginTop = "5px";
+			
+			let newTagType = document.createElement("select");
+			for (let k of Object.keys(Tag.tagTypes)) {
+				let option = document.createElement("option");
+				option.setAttribute("value", k);
+				option.innerText = Tag.tagTypes[k].getName();
+				newTagType.appendChild(option);
 			}
+			
+			let goButton = document.createElement("button");
+			goButton.innerText = "Add";
+			goButton.classList.add("buttonDefault");
+			goButton.style.width = "70%";
+			goButton.style.margin = "10px auto 0";
+			
+			goButton.addEventListener("click", ()=> {
+				if (tasgListInput.value != "") {
+					let list = $("#tagOptions");
+					let tagDataId = null;
+					for (let child of list.children) {
+						if (child.value == tasgListInput.value) {
+							tagDataId = child.dataset.id;
+							break;
+						}
+					}
+					if (tagDataId) {
+						// Check if we are over the maximum amount of tags for this type
+						let maxAmt = Tag.tags[tagDataId].constructor.getMaxPerElement();
+						if (maxAmt > -1) {
+							let typeToCheck = Tag.tags[tagDataId].constructor;
+							let found = 0;
+							for (let tag of this.tags) {
+								if (Tag.tags[tag].constructor == typeToCheck && ++found >= maxAmt) {
+									console.log("Max amount of tag type reaches");
+									return;
+								}
+							}
+						}
+						
+						this.tags.push(tagDataId);
+						rebuildInspector();
+						closeOverlay();
+					} else console.log('Tag doesnt exist');
+				} else {
+					if (newTagName.value != "") {
+						for (let k of Object.keys(Tag.tags)) {
+							if (Tag.tags[k].name == newTagName.value) {
+								console.log("No duplicate named tags");
+								return;
+							}
+						}
+						
+						let maxAmt = Tag.tagTypes[newTagType.value].getMaxPerElement();
+						if (maxAmt > -1) {
+							let typeToCheck = Tag.tagTypes[newTagType.value].constructor;
+							let found = 0;
+							for (let tag of this.tags) {
+								if (Tag.tagTypes[newTagType.value].constructor == typeToCheck && ++found >= maxAmt) {
+									console.log("Max amount of tag type reaches");
+									return;
+								}
+							}
+						}
+						
+						this.tags.push(new Tag.tagTypes[newTagType.value](newTagName.value).id + "");
+						rebuildInspector();
+						closeOverlay();
+					} else console.log("The new tag needs a name");
+				}
+			});
+			
 			popUp.appendChild(tasgListInput);
 			popUp.appendChild(tagsList);
-			editSelectNode(this);
-			
-			// this.addTag(new AnyElementTag("Name").id);
+			popUp.insertAdjacentHTML("beforeend", "<br><br><strong>Or add a new one</strong><br><label>Tag name<label><br>");
+			popUp.appendChild(newTagName);
+			popUp.insertAdjacentHTML("beforeend", "<br><br><label>Tag type</label><br>");
+			popUp.appendChild(newTagType);
+			popUp.appendChild(goButton);
 		});
+		
 		tagsSection.appendChild(addTagButton);
 		tagsContainer.appendChild(tagsSection);
 		

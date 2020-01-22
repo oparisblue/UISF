@@ -111,10 +111,12 @@ function editSelectNode(node) {
 
 function rebuildInspector() {
 	$("#tab0").innerHTML = "";
-	$("#tab0").appendChild(node.getInspector(selectedElement));
+	$("#tab0").appendChild(selectedElement.getInspector());
 }
 
 function closeOverlay() {
 	$("#overlay").style.display = "none";
 	$("#rightClickMenu").style.display = "none";
+	$("#popUp").style.display = "none";
+	$("#popUp").innerHTML = "";
 }
