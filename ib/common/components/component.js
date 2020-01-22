@@ -475,7 +475,7 @@ class Component {
 			left.innerHTML = data.name + ":";
 			left.title = data.description;
 			let right = document.createElement("td");
-			right.appendChild(data.value.getInspector(field, this));
+			right.appendChild(data.getInspector(field, this));
 			let row = document.createElement("tr");
 			row.appendChild(left);
 			row.appendChild(right);
