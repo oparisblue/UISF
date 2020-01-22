@@ -20,8 +20,8 @@
 				}
 			}
 			
-			recurseInclude("./common/");
 			recurseInclude("./editor/");
+			recurseInclude("./common/");
 			
 			?>
 		</script>

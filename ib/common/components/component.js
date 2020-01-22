@@ -1,19 +1,29 @@
 class Component {
 	
 	constructor(x, y) {
-		this.constraints = [];
-		this.animations = [];
-		this.children = [];
-		this.parent = null;
 		
-		this.hasChanged = new Set();
-		
-		this.outlets = {};
-		this.eventListeners = {};
-		
+		// Describe the component
 		this.fields  = {};
 		this.events  = {};
 		this.actions = {};
+		
+		// Propreties the component currently has		
+		this.animations = [];
+		this.children = [];
+		this.parent = null;
+		this.active = true; // Set to false to stop ticking this element
+		
+		// All of the environment variables for the component (fields, outlets, event listeners, constraints)
+		this.evs = [];
+		
+		// Values derived from the environment variables
+		this.constraints = {};
+		this.eventListeners = [];
+		this.outlets = [];
+		this.tags = [];
+		
+		// Has something changed? Calls for rebuild of element DOM + this.outlets + this.eventListeners.
+		this.hasChanged = true;
 		
 		// Build the dom node wrapper for the element
 		
@@ -53,7 +63,7 @@ class Component {
 						let field = this.fields[k];
 						inletHTML += `
 							<div class="inletRow" title="${field.description}" onmouseup="editorWireTo(${this.id}, 'inlet', '${k}')">
-								${field.value.getIcon()} ${field.name}
+								${field.getIcon()} ${field.name}
 							</div>
 						`;
 					}
@@ -97,7 +107,7 @@ class Component {
 					let field = this.fields[k];
 					outletHTML += `
 						<div title="${field.description}">
-							${field.value.getIcon()} ${field.name}
+							${field.getIcon()} ${field.name}
 							<div class="outletDragFrom" onmousedown="editorDragWire(this, ${this.id}, 'outlet', '${k}');"></div>
 						</div>
 					`;
@@ -149,16 +159,17 @@ class Component {
 	}
 	
 	addConstraint(constraint) {
-		this.constraints.push(constraint);
+		this.setField(constraint.getType(), constraint, "constraint");
 	}
 	
-	addWire(ev, type, otherCompId, otherCompInlet) {
+	addWire(fromName, type, toId, toName) {
 		let obj = {
-			to: otherCompId,
-			do: otherCompInlet
+			fromName:  fromName,
+			type: type,
+			toId: toId,
+			toName: toName			
 		}
-		if (this.eventListeners.hasOwnProperty(ev)) this[type][ev].push(obj);
-		else this[type][ev] = [obj];
+		this.setField(fromName+toId+toName, obj, type.slice(0, -1));
 	}
 	
 	addChild(child) {
@@ -173,11 +184,38 @@ class Component {
 	}
 	
 	onUpdateTick() {
+		// If there have been changes, reduce the environment variables into values
+		if (this.hasChanged) {
+			let lst = [];
+			
+			// Build the by applying each environment variable to it
+			// They deal with fighting over properties, etc. We just get the array
+			// at the end.
+			for (let ev of this.evs) {
+				ev.applyTo(lst);
+			}
+			
+			// Clear / Reset all of these fields
+			this.outlets = [];
+			this.eventListeners = [];
+			this.constraints = [];
+			this.tags = [];
+			for (let k of Object.keys(this.fields)) {
+				this.fields[k].resetToDefault();
+			}
+			
+			// Now, set these values using the flattened environment variable values
+			for (let p of lst) {
+				if (p.type == "field" || p.type == "constraint") this[p.type + "s"][p.name] = p.value;
+				else                                             this[p.type + "s"].push(p.value);
+			}
+		}
+		
 		// Tick element
 		this.onTick();
 		
-		// Clear the changed elements
-		this.hasChanged.clear();
+		// Clear the changed flag (do this after ticking the element first, so it can adjust the DOM, etc)
+		this.hasChanged = false;
 		
 		// Animations
 		for (let i = this.animations.length - 1; i >= 0; i--) {
@@ -188,9 +226,12 @@ class Component {
 		}
 		
 		// Wires
-		for (let outlet of Object.keys(this.outlets)) {
-			for (let o of this.outlets[outlet]) {
-				pageComponents[o.to].setField(o.do, this.fields[outlet].value.value);
+		for (let o of this.outlets) {
+			if (o.type == "outlets") {
+				pageComponents[o.toId].setField(o.toName, this.fields[o.fromName], "field", WIRE_TYPE);
+			}
+			else { // e.g. o.type = constraint
+				pageComponents[o.toId].setField(o.toName, this.constraints[o.fromName], "constraint", WIRE_TYPE);
 			}
 		}
 		
@@ -201,14 +242,45 @@ class Component {
 	
 	fireEvent(ev, ...params) {
 		if (!this.eventListeners.hasOwnProperty(ev)) return;
-		for (let listener of this.eventListeners[ev]) {
-			pageComponents[listener.do].getMethods()[listener.method](...params);
+		for (let listener of this.eventListeners) {
+			if (listener.fromName == "ev") {
+				pageComponents[listener.toId].methods[listener.toName](...params);
+			}
 		}
 	}
 	
-	setField(field, value) {
-		this.fields[field].value.setValue(value);
-		this.hasChanged.add(field);
+	setField(field, value, type = "field", target = null) {
+		// For setting a field FROM THE INSPECTOR
+		// Sets the field using the environment variable for the current emulation state;
+		// or make a new environment variable which matches it.
+		
+		let chosenEv = -1;
+		if (target == null) target = evFromEmulation();
+		
+		for (let i = 0; i < this.evs.length; i++) {
+			if (this.evs[i].equiv(target)) {
+				if (
+					this.evs[i].properties.hasOwnProperty(field) &&
+					this.evs[i].properties[field].value == value
+				) {
+					return;
+				}
+				chosenEv = i;
+				break;
+			}
+		}
+		
+		if (chosenEv == -1) {
+			this.evs.push(target);
+			chosenEv = this.evs.length - 1;
+		}
+		
+		this.evs[chosenEv].properties[field] = {
+			type: type,
+			value: value
+		}
+		
+		this.hasChanged = true;
 	}
 	
 	getInspector() {
@@ -236,7 +308,7 @@ class Component {
 				left.innerHTML = data.name + ":";
 				left.title = data.description;
 				let right = document.createElement("td");
-				right.appendChild(data.value.getInspector(field, this));
+				right.appendChild(data.getInspector(field, this));
 				let row = document.createElement("tr");
 				row.appendChild(left);
 				row.appendChild(right);
@@ -250,34 +322,27 @@ class Component {
 		
 	}
 	
-	forceRefresh() {
-		// Trigger changes on all of the fields to get their initial values
-		for (let field of Object.keys(this.fields)) {
-			this.hasChanged.add(field);
-		}
+	/**
+	* Call at the end of the constructor when making a new component.
+	*/
+	build() {		
+		// Width + Height constants
+		this.setField("width", new ConstraintWidth(this.getDefaultWidth()),  "constraint", new EVNormal());
+		this.setField("width", new ConstraintWidth(this.getDefaultHeight()), "constraint", new EVNormal());
 	}
 	
 	startLayout() {
+		
+		if (!this.active) return null;
+		
 		// Create a list containing each type of constraint at most once.
 		// The largest screen size breakpoint which is within the current screen size is used.
 		
 		let realisedConstraints = {};
-		for (let constraint of this.constraints) {
-			let type = constraint.getType();
-			
-			if (constraint.screenSize != -1 && window.innerWidth > constraint.screenSize) continue;		
-			//console.log(constraint);	
-			
-			if (realisedConstraints.hasOwnProperty(type)) {
-				let other = realisedConstraints[type].c;
-				
-				if (constraint.screenSize > other.screenSize) realisedConstraints[type].c = constraint;			
-			}
-			else {
-				realisedConstraints[type] = {
-					c:        constraint,
-					resolved: false
-				}
+		for (let k of Object.keys(this.constraints)) {
+			realisedConstraints[this.constraints[k].getType()] = {
+				c:        this.constraints[k],
+				resolved: false
 			}
 		}
 		

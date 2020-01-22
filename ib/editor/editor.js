@@ -51,6 +51,7 @@ function addCompToPage(comp) {
 }
 
 window.addEventListener("load", ()=>{
+	
 	let btn = new ComponentButton();
 	pageComponents[0] = btn;
 	$("#main").appendChild(btn.domNode);
@@ -63,10 +64,12 @@ window.addEventListener("load", ()=>{
 	pageComponents["0"].addConstraint(new ConstraintAlign(-1, Direction.RIGHT, -1, 400));
 	pageComponents["0"].addConstraint(new ConstraintAlign(-1, Direction.TOP, -1, 100));
 	pageComponents["0"].addConstraint(new ConstraintHeight(-1, 20));
+	pageComponents["0"].onUpdateTick();
 	
 	pageComponents["1"].addConstraint(new ConstraintWidth(-1, 100));
 	pageComponents["1"].addConstraint(new ConstraintHeight(-1, 100));
 	pageComponents["1"].addConstraint(new ConstraintAlign(-1, Direction.TOP, 0, 10));
+	pageComponents["1"].onUpdateTick();
 	
 	redoLayout();
 	
@@ -103,6 +106,7 @@ function editSelectNode(node) {
 	if (selectedElement != null) selectedElement.domNode.classList.remove("editorSelected");
 	selectedElement = node;
 	
+	$("#tab0").innerHTML = "";
 	if (node != null) {
 		node.domNode.classList.add("editorSelected");
 		rebuildInspector();
@@ -111,7 +115,7 @@ function editSelectNode(node) {
 
 function rebuildInspector() {
 	$("#tab0").innerHTML = "";
-	$("#tab0").appendChild(node.getInspector(selectedElement));
+	$("#tab0").appendChild(selectedElement.getInspector());
 }
 
 function closeOverlay() {
