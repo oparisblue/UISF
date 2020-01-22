@@ -30,6 +30,7 @@
 		<title>Scaffold</title>
 	</head>
 	<body>
+		<div id="popUp" class="popUp" style="display: none;"></div>
 		<div id="main" onmousedown="editSelectNode(null)" oncontextmenu="return false;"></div>
 		<div id="inspector">
 			<div class="editorTabs">
@@ -67,5 +68,12 @@
 		<div id="overlay" onmousedown="closeOverlay();" oncontextmenu="return false;"></div>
 		<div id="rightClickMenu" oncontextmenu="return false;"></div>
 		<canvas id="wires"></canvas>
+		<!-- Only for testing tags -->
+		<script>
+			for (var i = 0; i < 4; i++) {
+				new AnyElementTag(`Name${(i + 1)}`).id;
+			}
+		</script>
+		<!--  -->
 	</body>
 </html>

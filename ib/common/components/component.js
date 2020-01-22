@@ -21,7 +21,7 @@ class Component {
 		this.eventListeners = [];
 		this.outlets = [];
 		this.tags = [];
-		
+    
 		// Has something changed? Calls for rebuild of element DOM + this.outlets + this.eventListeners.
 		this.hasChanged = true;
 		
@@ -136,16 +136,31 @@ class Component {
 		this.id = Component.nextId++;
 	}
 	
+	// Functions for tags
+	/**
+	* Adds the tagId to the components tags array.
+	* @param {any}id The id of the tag
+	*/
+	addTag(id) {
+		if (!this.tags.includes(id)) this.tags.push(id);
+	}
+	
+	/**
+	* Removes the tagId from the components tags array.
+	* @param {any}id The id of the tag
+	*/
+	removeTag(id) {
+		if (this.tags.includes(id)) this.tags.splice(this.tags.indexOf(id), 1);
+	}
+	
 	
 	// Abstract
-	
 	
 	getEditorName()        { return ""; }
 	getEditorDescription() { return ""; }
 	getDefaultWidth()      { return 0;  }
 	getDefaultHeight()     { return 0;  }
 	onTick()               {            }
-	
 	
 	// Concrete
 	
@@ -288,38 +303,190 @@ class Component {
 		
 		let elem = document.createElement("div");
 		
-		if (fields.length == 0) {
+		let title = document.createElement("div");
+		title.classList.add("editorTitle");
+		title.innerHTML = `<strong>${this.getEditorName()}</strong><br><small>${this.getEditorDescription()}</small>`;
+		elem.appendChild(title);
+		
+		// Size position
+		let constraintsContainer = document.createElement("div");
+		constraintsContainer.classList.add("editorSection");
+		constraintsContainer.insertAdjacentHTML("beforeend", "<strong>Constraints</strong>");
+		
+		elem.appendChild(constraintsContainer);
+		
+		// Tags
+		let tagsContainer = document.createElement("div");
+		tagsContainer.classList.add("editorSection");
+		tagsContainer.insertAdjacentHTML("beforeend", "<strong>Tags</strong>");
+		
+		let tagsSection = document.createElement("div");
+		tagsSection.classList.add("tagsSection");
+		
+		for (let i = 0; i < this.tags.length; i++) {
+			let tag = document.createElement("div");
+			tag.classList.add("tag", `tag${this.tags[i]}`);
+			tag.innerText = Tag.tags[this.tags[i]].name;
+			tag.style.backgroundColor = Tag.tags[this.tags[i]].getColour();
 			
-			elem.setAttribute("style", "position:absolute;left:50%;top:50%;transform:translate(-50%, -50%);text-align:center;");
-			elem.innerHTML = `<i class="mdi mdi-information-outline"></i><br>No Properties!`;
+			let tagClose = document.createElement("i");
+			tagClose.classList.add("mdi", "mdi-close-circle");
+			tagClose.addEventListener("click", ()=> {
+				this.removeTag(this.tags[i]);
+				rebuildInspector();
+			});
+			tag.appendChild(tagClose);
 			
+			tagsSection.appendChild(tag);
 		}
-		else {
-			let title = document.createElement("div");
-			title.classList.add("editorTitle");
-			title.innerHTML = `<strong>${this.getEditorName()}</strong><br><small>${this.getEditorDescription()}</small>`;
-			elem.appendChild(title);
+		
+		let addTagButton = document.createElement("button");
+		addTagButton.classList.add("addTagButton");
+		addTagButton.innerText = "+";
+		addTagButton.addEventListener("click", ()=> {
+			$("#overlay").style.display = "block";
+			let popUpWidth = 200;
+			let popUpHeight = 100;
+			let rect = addTagButton.getBoundingClientRect();
+			let popUp = document.getElementById("popUp");
 			
-			let table = document.createElement("table");
-			let tbody = document.createElement("tbody");
-			for (let field of fields) {
-				let data = this.fields[field];
-				let left = document.createElement("td");
-				left.innerHTML = data.name + ":";
-				left.title = data.description;
-				let right = document.createElement("td");
-				right.appendChild(data.getInspector(field, this));
-				let row = document.createElement("tr");
-				row.appendChild(left);
-				row.appendChild(right);
-				tbody.appendChild(row);
+			popUp.style.left = `${rect.left + ((rect.width - popUpWidth) / 2)}px`;
+			popUp.style.top = `${rect.top + rect.height + 20}px`;
+			popUp.style.display = "block";
+			popUp.style.minWidth = `${popUpWidth}px`;
+			popUp.style.minHeight = `${popUpHeight}px`;
+			
+			popUp.insertAdjacentHTML("beforeend", "<strong>Add an existing tag</strong><br>");
+			
+			let tagsList = document.createElement("datalist");
+			tagsList.id = "tagOptions";
+			
+			let tasgListInput = document.createElement("input");
+			tasgListInput.setAttribute("list", "tagOptions");
+			tasgListInput.setAttribute("type", "text");
+			tasgListInput.style.marginTop = "5px";
+			for (let k of Object.keys(Tag.tags)) {
+				if (!this.tags.includes(k)) {
+					let option = document.createElement("option");
+					option.value = Tag.tags[k].name;
+					option.setAttribute("data-id", Tag.tags[k].id);
+					tagsList.appendChild(option);
+				}
+			}			
+			
+			let newTagName = document.createElement("input");
+			newTagName.setAttribute("type", "text");
+			newTagName.style.marginTop = "5px";
+			
+			let newTagType = document.createElement("select");
+			for (let k of Object.keys(Tag.tagTypes)) {
+				let option = document.createElement("option");
+				option.setAttribute("value", k);
+				option.innerText = Tag.tagTypes[k].getName();
+				newTagType.appendChild(option);
 			}
-			table.appendChild(tbody);
-			elem.appendChild(table);
+			
+			let goButton = document.createElement("button");
+			goButton.innerText = "Add";
+			goButton.classList.add("buttonDefault");
+			goButton.style.width = "70%";
+			goButton.style.margin = "10px auto 0";
+			
+			goButton.addEventListener("click", ()=> {
+				if (tasgListInput.value != "") {
+					let list = $("#tagOptions");
+					let tagDataId = null;
+					for (let child of list.children) {
+						if (child.value == tasgListInput.value) {
+							tagDataId = child.dataset.id;
+							break;
+						}
+					}
+					if (tagDataId) {
+						// Check if we are over the maximum amount of tags for this type
+						let maxAmt = Tag.tags[tagDataId].constructor.getMaxPerElement();
+						if (maxAmt > -1) {
+							let typeToCheck = Tag.tags[tagDataId].constructor;
+							let found = 0;
+							for (let tag of this.tags) {
+								if (Tag.tags[tag].constructor == typeToCheck && ++found >= maxAmt) {
+									console.log("Max amount of tag type reaches");
+									return;
+								}
+							}
+						}
+						
+						this.tags.push(tagDataId);
+						rebuildInspector();
+						closeOverlay();
+					} else console.log('Tag doesnt exist');
+				} else {
+					if (newTagName.value != "") {
+						for (let k of Object.keys(Tag.tags)) {
+							if (Tag.tags[k].name == newTagName.value) {
+								console.log("No duplicate named tags");
+								return;
+							}
+						}
+						
+						let maxAmt = Tag.tagTypes[newTagType.value].getMaxPerElement();
+						if (maxAmt > -1) {
+							let typeToCheck = Tag.tagTypes[newTagType.value].constructor;
+							let found = 0;
+							for (let tag of this.tags) {
+								if (Tag.tagTypes[newTagType.value].constructor == typeToCheck && ++found >= maxAmt) {
+									console.log("Max amount of tag type reaches");
+									return;
+								}
+							}
+						}
+						
+						this.tags.push(new Tag.tagTypes[newTagType.value](newTagName.value).id + "");
+						rebuildInspector();
+						closeOverlay();
+					} else console.log("The new tag needs a name");
+				}
+			});
+			
+			popUp.appendChild(tasgListInput);
+			popUp.appendChild(tagsList);
+			popUp.insertAdjacentHTML("beforeend", "<br><br><strong>Or add a new one</strong><br><label>Tag name<label><br>");
+			popUp.appendChild(newTagName);
+			popUp.insertAdjacentHTML("beforeend", "<br><br><label>Tag type</label><br>");
+			popUp.appendChild(newTagType);
+			popUp.appendChild(goButton);
+		});
+		
+		tagsSection.appendChild(addTagButton);
+		tagsContainer.appendChild(tagsSection);
+		
+		elem.appendChild(tagsContainer);
+		
+		// Fields
+		let fieldsContainer = document.createElement("div");
+		fieldsContainer.classList.add("editorSection");
+		fieldsContainer.insertAdjacentHTML("beforeend", "<strong>Fields</strong>");
+		
+		let table = document.createElement("table");
+		let tbody = document.createElement("tbody");
+		for (let field of fields) {
+			let data = this.fields[field];
+			let left = document.createElement("td");
+			left.innerHTML = data.name + ":";
+			left.title = data.description;
+			let right = document.createElement("td");
+			right.appendChild(data.value.getInspector(field, this));
+			let row = document.createElement("tr");
+			row.appendChild(left);
+			row.appendChild(right);
+			tbody.appendChild(row);
 		}
+		
+		table.appendChild(tbody);
+		fieldsContainer.appendChild(table);
+		elem.appendChild(fieldsContainer);
 		
 		return elem;
-		
 	}
 	
 	/**

@@ -15,6 +15,42 @@ body {
 	height:calc(100% - 32px);
 }
 
+.popUp {
+	position: absolute;
+	/*
+	
+	These are set by the component that called the popUp
+	
+	*/
+	
+	/*
+	top: 20px;
+	left: 20px;
+	*/ 
+	border-radius: 5px;
+	background-color: white;
+	z-index: 10;
+	background-color: #636363;
+	padding:5px;
+	border-top:solid 1px #999;
+	box-sizing:border-box;
+	text-align: center;
+}
+
+.popUp::before {
+	content: "";
+	position: absolute;
+	z-index: -1;
+	top: -11px;
+	left: 50%;
+	transform: translateX(-50%) rotate(45deg);
+	width: 20px;
+	height: 20px;
+	background-color: #636363;
+	border-top:solid 1px #999;
+	border-left:solid 1px #999;
+}
+
 #inspector {
 	background-color:#424242;
 	position:absolute;
@@ -65,11 +101,15 @@ body {
 	border-bottom:solid 1px #751212;
 }
 .editorTabContent {
-	padding:5px;
+	margin-top: 5px;
 	height:calc(100% - 31px);
 	top:31px;
 	position:absolute;
 	width:100%;
+}
+.editorSection {
+	border-top: 1px solid #999;
+	padding: 5px;
 }
 
 .editorTab:active, .emuButton:active {
@@ -79,7 +119,42 @@ body {
 	float:right;
 }
 .editorTitle {
-	margin-bottom:15px;
+	margin-bottom: 5px;
+	padding: 0 5px;
+}
+
+.tagsSection {
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	margin-top: 5px;
+}
+
+.addTagButton {
+	margin-bottom: 4px;
+	height: 26px;
+	width: 26px;
+}
+
+.tag {
+	height: 26px;
+	border-radius: 5px;
+	border-top: 1px solid rgba(255, 255, 255, 0.2);
+	background-color: #636363;
+	margin: 0 4px 4px 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 0 8px;
+}
+
+.tag > i {
+	margin-left: 8px;
+}
+
+.tag > i:hover {
+	cursor: pointer;
+	opacity: 0.8;
 }
 
 .editorSelected {

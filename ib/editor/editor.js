@@ -121,4 +121,6 @@ function rebuildInspector() {
 function closeOverlay() {
 	$("#overlay").style.display = "none";
 	$("#rightClickMenu").style.display = "none";
+	$("#popUp").style.display = "none";
+	$("#popUp").innerHTML = "";
 }
