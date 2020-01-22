@@ -23,8 +23,6 @@ class ComponentButton extends Component {
 		
 	}
 	
-	getEditorName() { return "Button"; }
-	getEditorDescription() { return "A button which can be clicked by the user."; }
 	getDefaultWidth()      { return 100; }
 	getDefaultHeight()     { return 20;  }
 	
@@ -33,6 +31,13 @@ class ComponentButton extends Component {
 			this.button.innerHTML = this.fields.label.getValue();
 			toggleClass(this.button, "buttonDefault", this.fields.default.getValue());
 			this.button.disabled = this.fields.disabled.getValue();
+		}
+	}
+	
+	static getEditorInfo() {
+		return {
+			name: "Button",
+			description: "A button which can be clicked by the user."
 		}
 	}
 	

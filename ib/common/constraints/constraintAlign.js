@@ -1,6 +1,6 @@
 class ConstraintAlign extends Constraint {
-	constructor(screenSize, direction, alignTo, constant) {
-		super(screenSize)
+	constructor(direction, alignTo, constant) {
+		super();
 		this.direction = direction;
 		this.alignTo = alignTo;
 		this.constant = constant;

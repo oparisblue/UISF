@@ -1,7 +1,5 @@
 class Constraint {
-	constructor(screenSize) {
-		this.screenSize = screenSize;
-	}
+	constructor() {}
 	getType() { return ""; }
 }
 

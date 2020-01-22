@@ -156,8 +156,6 @@ class Component {
 	
 	// Abstract
 	
-	getEditorName()        { return ""; }
-	getEditorDescription() { return ""; }
 	getDefaultWidth()      { return 0;  }
 	getDefaultHeight()     { return 0;  }
 	onTick()               {            }
@@ -305,7 +303,8 @@ class Component {
 		
 		let title = document.createElement("div");
 		title.classList.add("editorTitle");
-		title.innerHTML = `<strong>${this.getEditorName()}</strong><br><small>${this.getEditorDescription()}</small>`;
+		let elementInfo = this.constructor.getEditorInfo();
+		title.innerHTML = `<strong>${elementInfo.name}</strong><br><small>${elementInfo.description}</small>`;
 		elem.appendChild(title);
 		
 		// Size position
@@ -343,18 +342,8 @@ class Component {
 		let addTagButton = document.createElement("button");
 		addTagButton.classList.add("addTagButton");
 		addTagButton.innerText = "+";
-		addTagButton.addEventListener("click", ()=> {
-			$("#overlay").style.display = "block";
-			let popUpWidth = 200;
-			let popUpHeight = 100;
-			let rect = addTagButton.getBoundingClientRect();
-			let popUp = document.getElementById("popUp");
-			
-			popUp.style.left = `${rect.left + ((rect.width - popUpWidth) / 2)}px`;
-			popUp.style.top = `${rect.top + rect.height + 20}px`;
-			popUp.style.display = "block";
-			popUp.style.minWidth = `${popUpWidth}px`;
-			popUp.style.minHeight = `${popUpHeight}px`;
+		addTagButton.addEventListener("click", ()=> {			
+			let popUp = openPopUp(addTagButton, 200, 240, true);
 			
 			popUp.insertAdjacentHTML("beforeend", "<strong>Add an existing tag</strong><br>");
 			
@@ -495,7 +484,7 @@ class Component {
 	build() {		
 		// Width + Height constants
 		this.setField("width", new ConstraintWidth(this.getDefaultWidth()),  "constraint", new EVNormal());
-		this.setField("width", new ConstraintWidth(this.getDefaultHeight()), "constraint", new EVNormal());
+		this.setField("height", new ConstraintHeight(this.getDefaultHeight()), "constraint", new EVNormal());
 	}
 	
 	startLayout() {

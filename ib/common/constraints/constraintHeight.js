@@ -1,6 +1,6 @@
 class ConstraintHeight extends Constraint {
-	constructor(screenSize, height) {
-		super(screenSize);
+	constructor(height) {
+		super();
 		this.height = height;
 	}
 	getType() { return "height"; }

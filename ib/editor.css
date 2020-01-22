@@ -17,16 +17,6 @@ body {
 
 .popUp {
 	position: absolute;
-	/*
-	
-	These are set by the component that called the popUp
-	
-	*/
-	
-	/*
-	top: 20px;
-	left: 20px;
-	*/ 
 	border-radius: 5px;
 	background-color: white;
 	z-index: 10;
@@ -35,6 +25,7 @@ body {
 	border-top:solid 1px #999;
 	box-sizing:border-box;
 	text-align: center;
+	box-shadow:0 4px 30px #0008;
 }
 
 .popUp::before {
@@ -49,6 +40,12 @@ body {
 	background-color: #636363;
 	border-top:solid 1px #999;
 	border-left:solid 1px #999;
+}
+
+.popUp.popUpAboveButton::before {
+	top:auto !important;
+	bottom:-10px !important;
+	border-style:none !important;
 }
 
 #inspector {
@@ -268,4 +265,42 @@ body {
 .inletRow:hover {
 	background-color:#555;
 	cursor:pointer;
+}
+
+#componentLibrary {
+	position:fixed;
+	left:calc(50% - (325px / 2));
+	top:calc(50% - (32px / 2));
+	transform:translate(-50%, -50%);
+	width:50%;
+	height:50%;
+	background-color:#21212188;
+	backdrop-filter:blur(30px);
+	box-shadow:0 4px 20px #0008;
+	border-radius:10px;
+	box-sizing:border-box;
+	display:none;
+}
+#componentLibrary input {
+	width:100%;
+	height:50px;
+	background-color:#0c0c0c;
+	font-size:1.5em;
+}
+#componentLibrary input:focus {
+	box-shadow:none !important;
+}
+#componentLibrary #componentLibraryResults {
+	height:100%;
+	overflow:scroll;
+}
+#componentLibrary #componentLibraryResults h1 {
+	padding:0;
+	margin:0;
+	font-size:1.2em;
+}
+.componentLibraryResult {
+	padding:5px;
+	box-sizing:border-box;
+	border-bottom:solid 1px #555;
 }

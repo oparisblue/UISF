@@ -1,6 +1,6 @@
 class ConstraintInvisible extends Constraint {
-	constructor(screenSize, isInvisible) {
-		super(screenSize);
+	constructor(isInvisible) {
+		super();
 		this.isInvisible = isInvisible;
 	}
 	getType() { return "invisible"; }

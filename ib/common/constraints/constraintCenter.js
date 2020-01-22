@@ -1,6 +1,6 @@
 class ConstraintCenter extends Constraint {
-	constructor(screenSize, axis) {
-		super(screenSize);
+	constructor(axis) {
+		super();
 		this.axis = axis;
 	}
 	getType() { return "center" + this.axis; }

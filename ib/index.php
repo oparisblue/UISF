@@ -51,11 +51,11 @@
 			<button><i class="mdi mdi-content-save"></i> Save</button>
 			<button><i class="mdi mdi-folder-open"></i> Open</button>
 			|
-			<button onclick="addCompToPage(new ComponentButton())"><i class="mdi mdi-plus"></i> Add Component</button>
+			<button onclick="openComponentLibrary();"><i class="mdi mdi-plus"></i> Add Component</button>
 			|
 			<button><i class="mdi mdi-earth"></i> Localise</button>
 			|
-			<button class="emuButton">
+			<button class="emuButton" onclick="emulationPopup();">
 				<div class="emuTitle"><i class="mdi mdi-monitor-screenshot"></i> Emulation</div>&#8203;
 				<div class="emuTitle">none</div>
 				<!--<div class="emuScreenSize">width <= 500</div>
@@ -68,9 +68,15 @@
 		<div id="overlay" onmousedown="closeOverlay();" oncontextmenu="return false;"></div>
 		<div id="rightClickMenu" oncontextmenu="return false;"></div>
 		<canvas id="wires"></canvas>
+		<div id="componentLibrary">
+			<input type="text" oninput="filterComponentLibrary()" id="componentLibrarySearch" placeholder="Search...">
+			<div id="componentLibraryResults"></div>
+		</div>
+		
+		
 		<!-- Only for testing tags -->
 		<script>
-			for (var i = 0; i < 4; i++) {
+			for (let i = 0; i < 4; i++) {
 				new AnyElementTag(`Name${(i + 1)}`).id;
 			}
 		</script>

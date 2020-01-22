@@ -1,6 +1,6 @@
 class ConstraintWidth extends Constraint {
-	constructor(screenSize, width) {
-		super(screenSize);
+	constructor(width) {
+		super();
 		this.width = width;
 	}
 	getType() { return "width"; }

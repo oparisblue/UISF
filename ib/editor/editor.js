@@ -35,21 +35,6 @@ let selectedElement = null;
 
 let ctx;
 
-function addCompToPage(comp) {
-	
-	comp.addConstraint(new ConstraintWidth(-1, comp.getDefaultWidth()));
-	comp.addConstraint(new ConstraintHeight(-1, comp.getDefaultHeight()));
-	
-	pageComponents[comp.id] = comp;
-	$("#main").appendChild(comp.domNode);
-	editSelectNode(comp);
-	
-	comp.x = mouseX - (comp.getDefaultWidth() / 2);
-	comp.y = mouseY - (comp.getDefaultHeight() / 2);
-	redoLayout();
-	startDragging(comp, true, true, true);
-}
-
 window.addEventListener("load", ()=>{
 	
 	let btn = new ComponentButton();
@@ -60,15 +45,15 @@ window.addEventListener("load", ()=>{
 	pageComponents[1] = btn2;
 	$("#main").appendChild(btn2.domNode);
 	
-	pageComponents["0"].addConstraint(new ConstraintAlign(-1, Direction.LEFT, -1, 300));
-	pageComponents["0"].addConstraint(new ConstraintAlign(-1, Direction.RIGHT, -1, 400));
-	pageComponents["0"].addConstraint(new ConstraintAlign(-1, Direction.TOP, -1, 100));
-	pageComponents["0"].addConstraint(new ConstraintHeight(-1, 20));
+	pageComponents["0"].addConstraint(new ConstraintAlign(Direction.LEFT, -1, 300));
+	pageComponents["0"].addConstraint(new ConstraintAlign(Direction.RIGHT, -1, 400));
+	pageComponents["0"].addConstraint(new ConstraintAlign(Direction.TOP, -1, 100));
+	pageComponents["0"].addConstraint(new ConstraintHeight(20));
 	pageComponents["0"].onUpdateTick();
 	
-	pageComponents["1"].addConstraint(new ConstraintWidth(-1, 100));
-	pageComponents["1"].addConstraint(new ConstraintHeight(-1, 100));
-	pageComponents["1"].addConstraint(new ConstraintAlign(-1, Direction.TOP, 0, 10));
+	pageComponents["1"].addConstraint(new ConstraintWidth(100));
+	pageComponents["1"].addConstraint(new ConstraintHeight(100));
+	pageComponents["1"].addConstraint(new ConstraintAlign(Direction.TOP, 0, 10));
 	pageComponents["1"].onUpdateTick();
 	
 	redoLayout();
@@ -123,4 +108,24 @@ function closeOverlay() {
 	$("#rightClickMenu").style.display = "none";
 	$("#popUp").style.display = "none";
 	$("#popUp").innerHTML = "";
+	$("#componentLibrary").style.display = "none";
+}
+
+function openPopUp(button, width, height, belowButton) {
+	let popUp = $("#popUp");
+	
+	$("#overlay").style.display = "block";
+	
+	popUp.innerHTML = "";
+	
+	let rect = button.getBoundingClientRect();
+	
+	popUp.style.left    = `${rect.left + ((rect.width - width) / 2)}px`;
+	popUp.style.top     = belowButton ? `${rect.top + rect.height + 20}px` : `${rect.top - height - 20}px`;
+	popUp.style.display = "block";
+	popUp.style.width   = width + "px";
+	popUp.style.height  = height + "px";
+	if (!belowButton) popUp.classList.add("popUpAboveButton");
+	
+	return popUp;
 }
