@@ -5,10 +5,13 @@ function valOrFalse(obj, prop) {
 	return obj != undefined && obj != null && obj.hasOwnProperty(prop) ? obj[prop] : false;
 }
 
-window.addEventListener("resize", redoLayout);
+window.addEventListener("resize", ()=>{
+	Environment.width = window.innerWidth;
+	environmentHasChanged = true;
+	redoLayout();
+});
 
-
-function redoLayout() {
+function redoLayout() {	
 	
 	// Get the layout objects for all of the components
 	let comps = [];

@@ -7,8 +7,16 @@ function render() {
 	deltaTime = timeThisFrame - timeLastFrame;
 	timeLastFrame = timeThisFrame;
 	
-	for (let component of Object.keys(pageComponents)) {
-		pageComponents[component].onUpdateTick();
+	let envHasChanged = environmentHasChanged;
+	
+	environmentHasChanged = false;
+	
+	for (let k of Object.keys(pageComponents)) {	
+		let component = pageComponents[k];
+		if (envHasChanged) {
+			component.hasChanged = true;
+		}
+		if (component.active && component.parent == null) component.onUpdateTick();
 	}
 	
 	if (IN_EDIT_MODE) editorWireRender();

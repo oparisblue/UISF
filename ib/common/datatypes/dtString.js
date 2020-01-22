@@ -1,7 +1,7 @@
 class DTString extends DataType {
 	
-	constructor(value) {
-		super(value);
+	constructor(name, description, value, defaultValue = null) {
+		super(name, description, value, defaultValue);
 	}
 	
 	getValue() {
@@ -17,7 +17,7 @@ class DTString extends DataType {
 		input.type = "text";
 		input.value = this.value;
 		input.addEventListener("input", ()=>{
-			comp.setField(field, input.value);
+			comp.setField(field, new DTString(this.name, this.description, input.value, this.defaultValue));
 		});
 		return input;
 	}
