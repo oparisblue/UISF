@@ -102,11 +102,16 @@ window.addEventListener("load", ()=>{
 function editSelectNode(node) {
 	if (selectedElement != null) selectedElement.domNode.classList.remove("editorSelected");
 	selectedElement = node;
-	$("#tab0").innerHTML = "";
+	
 	if (node != null) {
 		node.domNode.classList.add("editorSelected");
-		$("#tab0").appendChild(node.getInspector());
+		rebuildInspector();
 	}
+}
+
+function rebuildInspector() {
+	$("#tab0").innerHTML = "";
+	$("#tab0").appendChild(node.getInspector(selectedElement));
 }
 
 function closeOverlay() {
