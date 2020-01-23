@@ -398,6 +398,59 @@ class Component {
 		constraintsBox.appendChild(middleConstraintRow);
 		constraintsBox.appendChild(bottomConstraintRow);
 		
+		let widthHeightContainer = document.createElement("div");
+		widthHeightContainer.classList.add("widthHeightContainer");
+		
+		let widthContainer = document.createElement("div");
+		let widthCheck = document.createElement("input");
+		widthCheck.setAttribute("type", "checkbox");
+		widthContainer.appendChild(widthCheck);
+		widthContainer.insertAdjacentHTML("beforeend", `<label style="margin: 0 5px;">Width:</label>`);
+		let widthInput = document.createElement("input");
+		widthInput.setAttribute("type", "number");
+		widthInput.style.width = "70px";
+		widthContainer.appendChild(widthInput);
+		
+		let heightContainer = document.createElement("div");
+		let heightCheck = document.createElement("input");
+		heightCheck.setAttribute("type", "checkbox");
+		heightContainer.appendChild(heightCheck);
+		heightContainer.insertAdjacentHTML("beforeend", `<label style="margin: 0 5px;">Height:</label>`);
+		let heightInput = document.createElement("input");
+		heightInput.setAttribute("type", "number");
+		heightInput.style.width = "70px";
+		heightContainer.appendChild(heightInput);
+		
+		widthHeightContainer.appendChild(widthContainer);
+		widthHeightContainer.appendChild(heightContainer);
+		
+		let positioningBox = document.createElement("div");
+		positioningBox.classList.add("positioningBox");
+		
+		let centerXBox = document.createElement("div");
+		let centerXInput = document.createElement("input");
+		centerXInput.setAttribute("type", "checkbox");
+		centerXBox.appendChild(centerXInput);
+		centerXBox.insertAdjacentHTML("beforeend", `<label>Center X</label>`);
+		
+		let centerYBox = document.createElement("div");
+		let centerYInput = document.createElement("input");
+		centerYInput.setAttribute("type", "checkbox");
+		centerYBox.appendChild(centerYInput);
+		centerYBox.insertAdjacentHTML("beforeend", `<label>Center Y</label>`);
+		
+		let hiddenBox = document.createElement("div");
+		let hiddenInput = document.createElement("input");
+		hiddenInput.setAttribute("type", "checkbox");
+		hiddenBox.appendChild(hiddenInput);
+		hiddenBox.insertAdjacentHTML("beforeend", `<label>Hidden</label>`);
+		
+		positioningBox.appendChild(centerXBox);
+		positioningBox.appendChild(centerYBox);
+		positioningBox.appendChild(hiddenBox);
+		
+		constraintsBox.appendChild(widthHeightContainer);
+		constraintsBox.appendChild(positioningBox);
 		constraintsContainer.appendChild(constraintsBox);
 		
 		elem.appendChild(constraintsContainer);
@@ -548,15 +601,17 @@ class Component {
 		let tbody = document.createElement("tbody");
 		for (let field of fields) {
 			let data = this.fields[field];
-			let left = document.createElement("td");
-			left.innerHTML = data.name + ":";
-			left.title = data.description;
-			let right = document.createElement("td");
-			right.appendChild(data.getInspector(field, this));
-			let row = document.createElement("tr");
-			row.appendChild(left);
-			row.appendChild(right);
-			tbody.appendChild(row);
+			if (data.isInspectorEditable) {
+				let left = document.createElement("td");
+				left.innerHTML = data.name + ":";
+				left.title = data.description;
+				let right = document.createElement("td");
+				right.appendChild(data.getInspector(field, this));
+				let row = document.createElement("tr");
+				row.appendChild(left);
+				row.appendChild(right);
+				tbody.appendChild(row);
+			}
 		}
 		
 		table.appendChild(tbody);

@@ -132,7 +132,32 @@ body {
 	align-items: center;
 }
 .constraintRow > svg {
-	width: 33%;
+	width: calc(100% / 3);
+}
+
+.widthHeightContainer {
+	display: flex;
+	width: 100%;
+	margin-top: 10px;
+}
+.widthHeightContainer > div {
+	width: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.positioningBox {
+	display: flex;
+	width: 100%;
+	margin-top: 10px;
+}
+
+.positioningBox > div {
+	width: calc(100% / 3);
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 
