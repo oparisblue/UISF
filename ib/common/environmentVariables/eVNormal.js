@@ -12,6 +12,10 @@ class EVNormal extends EnvironmentVariable {
 		return ev.constructor == EVNormal;
 	}
 	
+	getEmulationTitle() {
+		 return `<div class="emuTitle">none</div>`;
+	}
+	
 }
 
 const NORMAL_TYPE = new EVNormal();

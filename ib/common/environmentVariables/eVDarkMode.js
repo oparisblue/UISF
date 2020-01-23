@@ -23,6 +23,10 @@ class EVDarkMode extends EnvironmentVariable {
 		return ev.constructor == EVDarkMode && ev.shouldBeTrue == this.shouldBeTrue;
 	}
 	
+	getEmulationTitle() {
+		 return `<div class="emuAccess">${this.getName()}</div>`;
+	}
+	
 }
 
 let darkMode = window.matchMedia("(prefers-color-scheme: dark)");

@@ -37,6 +37,13 @@ class EnvironmentVariable {
 		return false;
 	}
 	
+	/**
+	* @return The HTML which represents this element on the "emulate" button in the editor.
+	*/
+	getEmulationTitle() {
+		return ``;
+	}
+	
 	// Concrete
 	
 	addProperty(name, type, value) {

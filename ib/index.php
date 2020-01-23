@@ -57,7 +57,7 @@
 			|
 			<button class="emuButton" onclick="emulationPopup();">
 				<div class="emuTitle"><i class="mdi mdi-monitor-screenshot"></i> Emulation</div>&#8203;
-				<div class="emuTitle">none</div>
+				<span id="emuButtonEnvDisplay"><div class="emuTitle">none</div></span>
 				<!--<div class="emuScreenSize">width <= 500</div>
 				<div class="emuRights">Is Pro = true</div>
 				<div class="emuEnvVar">Edit Mode = true</div>

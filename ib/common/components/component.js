@@ -214,7 +214,7 @@ class Component {
 			this.constraints = [];
 			this.tags = [];
 			for (let k of Object.keys(this.fields)) {
-				this.fields[k].resetToDefault();
+				this.fields[k] = this.fields[k].resetToDefault();
 			}
 			
 			// Now, set these values using the flattened environment variable values

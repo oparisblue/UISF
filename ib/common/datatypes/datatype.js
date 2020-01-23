@@ -11,7 +11,7 @@ class DataType {
 	setValue() {}
 	
 	resetToDefault() {
-		this.setValue(this.defaultValue);
+		return new this.constructor(this.name, this.description, this.defaultValue, this.defaultValue);
 	}
 	
 	getInspector(_field, _comp) { return document.createElement("div"); }

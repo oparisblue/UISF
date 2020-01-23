@@ -57,7 +57,7 @@ body {
 	width:325px;
 }
 
-#inspector input[type="checkbox"] {
+#inspector input[type="checkbox"], #popUp input[type="checkbox"] {
 	width:18px;
 	height:18px;
 }
@@ -215,7 +215,7 @@ body {
 	padding-left:10px !important;
 	padding-right:10px !important;
 }
-.emuTitle:first-child {
+.emuButton>.emuTitle:first-child {
 	border-radius:5px 0 0 5px;
 }
 .emuScreenSize {
@@ -303,4 +303,7 @@ body {
 	padding:5px;
 	box-sizing:border-box;
 	border-bottom:solid 1px #555;
+}
+.emulateTable {
+	text-align:left !important;
 }

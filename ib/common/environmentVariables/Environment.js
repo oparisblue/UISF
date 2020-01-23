@@ -11,13 +11,13 @@ const Environment = {
 
 const EmulatedEnvironment = {
 	doWidth: false,
-	width: 0,
+	width: 1280,
 	
 	doDarkMode: false,
-	isDarkMode: false,
+	isDarkMode: true,
 	
 	doReduceMotion: false,
-	isReducedMotion: false
+	isReducedMotion: true
 }
 
 let env = IN_EDIT_MODE ? EmulatedEnvironment : Environment;

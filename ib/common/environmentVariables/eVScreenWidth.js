@@ -24,4 +24,8 @@ class EVScreenWidth extends EnvironmentVariable {
 		return ev.constructor == EVScreenWidth && ev.size == this.size;
 	}
 	
+	getEmulationTitle() {
+		 return `<div class="emuScreenSize">${this.getName()}</div>`;
+	}
+	
 }

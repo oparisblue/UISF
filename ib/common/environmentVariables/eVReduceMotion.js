@@ -23,6 +23,10 @@ class EVReduceMotion extends EnvironmentVariable {
 		return ev.constructor == EVReduceMotion && ev.shouldBeTrue == this.shouldBeTrue;
 	}
 	
+	getEmulationTitle() {
+		 return `<div class="emuAccess">${this.getName()}</div>`;
+	}
+	
 }
 
 let reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");

@@ -33,4 +33,8 @@ class EVMultiple extends EnvironmentVariable {
 		return false;
 	}
 	
+	getEmulationTitle() {
+		 return this.others.reduce((acc, val)=>acc + val.getEmulationTitle(), ``);
+	}
+	
 }
