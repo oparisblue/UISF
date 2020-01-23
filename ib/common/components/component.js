@@ -296,6 +296,19 @@ class Component {
 		this.hasChanged = true;
 	}
 	
+	toggleConstraint(constraintId) {
+		let amountOn = 0;
+		if (constraintId == 5) {
+			for (let i = 0; i < 4; i++) if ($(`#constraint${i + 1}Icon`).style.fill == "red") amountOn++;
+			for (let i = 0; i < 5; i++) $(`#constraint${i + 1}Icon`).style.fill = amountOn == 4 ? "" : "red";
+		} else {
+			$(`#constraint${constraintId}Icon`).style.fill = $(`#constraint${constraintId}Icon`).style.fill ? "" : "red";
+			for (let i = 0; i < 4; i++) if ($(`#constraint${i + 1}Icon`).style.fill == "red") amountOn++;
+			if (amountOn == 4) $("#constraint5Icon").style.fill = "red";
+			else $("#constraint5Icon").style.fill = "";
+		} 
+	}
+	
 	getInspector() {
 		let fields = Object.keys(this.fields);
 		
@@ -310,7 +323,135 @@ class Component {
 		// Size position
 		let constraintsContainer = document.createElement("div");
 		constraintsContainer.classList.add("editorSection");
-		constraintsContainer.insertAdjacentHTML("beforeend", "<strong>Constraints</strong>");
+		constraintsContainer.insertAdjacentHTML("beforeend", "<strong>Size & Constraints</strong>");
+		
+		let constraintsBox = document.createElement("div");
+		constraintsBox.classList.add("constraintsBox");
+		
+		let topConstraintRow = document.createElement("div");
+		topConstraintRow.classList.add("constraintRow");
+		
+		let topConstraintInput = document.createElement("input");
+		topConstraintInput.setAttribute("type", "number");
+		topConstraintInput.style.width = "50px";
+		let topConstraintSelect = document.createElement("select");
+		topConstraintRow.appendChild(topConstraintInput);
+		topConstraintRow.appendChild(topConstraintSelect);
+		
+		let middleConstraintRow = document.createElement("div");
+		middleConstraintRow.classList.add("constraintRow");
+		
+		let leftConstraintInput = document.createElement("input");
+		leftConstraintInput.setAttribute("type", "number");
+		leftConstraintInput.style.width = "50px";
+		let leftConstraintSelect = document.createElement("select");
+		middleConstraintRow.appendChild(leftConstraintInput);
+		middleConstraintRow.appendChild(leftConstraintSelect);
+	
+		middleConstraintRow.insertAdjacentHTML("beforeend", `
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 84 84">
+				<defs>
+					<style>
+						.cls-1 {
+							opacity: 0;
+							cursor: pointer;
+						}
+						.cls-2 {
+							fill: #fff;
+						}
+					</style>
+				</defs>
+				<title>constraints</title>
+				<g>
+					<polygon id="constraint1Icon" class="cls-2" points="33 0 51 0 51 2 43 2 43 25 51 25 51 27 33 27 33 25 41 25 41 2 33 2 33 0" />
+					<polygon id="constraint2Icon" class="cls-2" points="84 33 84 51 82 51 82 43 59 43 59 51 57 51 57 33 59 33 59 41 82 41 82 33 84 33" />
+					<polygon id="constraint3Icon" class="cls-2" points="33 57 51 57 51 59 43 59 43 82 51 82 51 84 33 84 33 82 41 82 41 59 33 59 33 57" />
+					<polygon id="constraint4Icon" class="cls-2" points="27 33 27 51 25 51 25 43 2 43 2 51 0 51 0 33 2 33 2 41 25 41 25 33 27 33" />
+					<path id="constraint5Icon" class="cls-2" d="M42,34.5A7.5,7.5,0,1,0,49.5,42,7.5,7.5,0,0,0,42,34.5ZM42,47a5,5,0,1,1,5-5A5,5,0,0,1,42,47Z" />
+					<rect onclick="selectedElement.toggleConstraint(1)" class="cls-1" x="33" width="18" height="27" />
+					<rect onclick="selectedElement.toggleConstraint(2)" class="cls-1" x="57" y="33" width="27" height="18" />
+					<rect onclick="selectedElement.toggleConstraint(3)" class="cls-1" x="33" y="57" width="18" height="27" />
+					<rect onclick="selectedElement.toggleConstraint(4)" class="cls-1" y="33" width="27" height="18" />
+					<rect onclick="selectedElement.toggleConstraint(5)" class="cls-1" x="34.5" y="34.5" width="15" height="15" />
+				</g>
+			</svg>
+		`);
+		
+		let rightConstraintInput = document.createElement("input");
+		rightConstraintInput.setAttribute("type", "number");
+		rightConstraintInput.style.width = "50px";
+		let rightConstraintSelect = document.createElement("select");
+		middleConstraintRow.appendChild(rightConstraintInput);
+		middleConstraintRow.appendChild(rightConstraintSelect);
+		
+		let bottomConstraintRow = document.createElement("div");
+		bottomConstraintRow.classList.add("constraintRow");
+		
+		let bottomConstraintInput = document.createElement("input");
+		bottomConstraintInput.setAttribute("type", "number");
+		bottomConstraintInput.style.width = "50px";
+		let bottomConstraintSelect = document.createElement("select");
+		bottomConstraintRow.appendChild(bottomConstraintInput);
+		bottomConstraintRow.appendChild(bottomConstraintSelect);
+		
+		constraintsBox.appendChild(topConstraintRow);
+		constraintsBox.appendChild(middleConstraintRow);
+		constraintsBox.appendChild(bottomConstraintRow);
+		
+		let widthHeightContainer = document.createElement("div");
+		widthHeightContainer.classList.add("widthHeightContainer");
+		
+		let widthContainer = document.createElement("div");
+		let widthCheck = document.createElement("input");
+		widthCheck.setAttribute("type", "checkbox");
+		widthContainer.appendChild(widthCheck);
+		widthContainer.insertAdjacentHTML("beforeend", `<label style="margin: 0 5px;">Width:</label>`);
+		let widthInput = document.createElement("input");
+		widthInput.setAttribute("type", "number");
+		widthInput.style.width = "70px";
+		widthContainer.appendChild(widthInput);
+		
+		let heightContainer = document.createElement("div");
+		let heightCheck = document.createElement("input");
+		heightCheck.setAttribute("type", "checkbox");
+		heightContainer.appendChild(heightCheck);
+		heightContainer.insertAdjacentHTML("beforeend", `<label style="margin: 0 5px;">Height:</label>`);
+		let heightInput = document.createElement("input");
+		heightInput.setAttribute("type", "number");
+		heightInput.style.width = "70px";
+		heightContainer.appendChild(heightInput);
+		
+		widthHeightContainer.appendChild(widthContainer);
+		widthHeightContainer.appendChild(heightContainer);
+		
+		let positioningBox = document.createElement("div");
+		positioningBox.classList.add("positioningBox");
+		
+		let centerXBox = document.createElement("div");
+		let centerXInput = document.createElement("input");
+		centerXInput.setAttribute("type", "checkbox");
+		centerXBox.appendChild(centerXInput);
+		centerXBox.insertAdjacentHTML("beforeend", `<label>Center X</label>`);
+		
+		let centerYBox = document.createElement("div");
+		let centerYInput = document.createElement("input");
+		centerYInput.setAttribute("type", "checkbox");
+		centerYBox.appendChild(centerYInput);
+		centerYBox.insertAdjacentHTML("beforeend", `<label>Center Y</label>`);
+		
+		let hiddenBox = document.createElement("div");
+		let hiddenInput = document.createElement("input");
+		hiddenInput.setAttribute("type", "checkbox");
+		hiddenBox.appendChild(hiddenInput);
+		hiddenBox.insertAdjacentHTML("beforeend", `<label>Hidden</label>`);
+		
+		positioningBox.appendChild(centerXBox);
+		positioningBox.appendChild(centerYBox);
+		positioningBox.appendChild(hiddenBox);
+		
+		constraintsBox.appendChild(widthHeightContainer);
+		constraintsBox.appendChild(positioningBox);
+		constraintsContainer.appendChild(constraintsBox);
 		
 		elem.appendChild(constraintsContainer);
 		
@@ -408,7 +549,7 @@ class Component {
 						this.tags.push(tagDataId);
 						rebuildInspector();
 						closeOverlay();
-					} else console.log('Tag doesnt exist');
+					} else console.log("Tag doesnt exist");
 				} else {
 					if (newTagName.value != "") {
 						for (let k of Object.keys(Tag.tags)) {
@@ -460,15 +601,17 @@ class Component {
 		let tbody = document.createElement("tbody");
 		for (let field of fields) {
 			let data = this.fields[field];
-			let left = document.createElement("td");
-			left.innerHTML = data.name + ":";
-			left.title = data.description;
-			let right = document.createElement("td");
-			right.appendChild(data.getInspector(field, this));
-			let row = document.createElement("tr");
-			row.appendChild(left);
-			row.appendChild(right);
-			tbody.appendChild(row);
+			if (data.isInspectorEditable) {
+				let left = document.createElement("td");
+				left.innerHTML = data.name + ":";
+				left.title = data.description;
+				let right = document.createElement("td");
+				right.appendChild(data.getInspector(field, this));
+				let row = document.createElement("tr");
+				row.appendChild(left);
+				row.appendChild(right);
+				tbody.appendChild(row);
+			}
 		}
 		
 		table.appendChild(tbody);
