@@ -8,7 +8,7 @@ function emulationPopup() {
 				</td>
 				<td>Screen Size:</td>
 				<td>
-					<input type="range" min="0" max="1280" value="${env.width}" oninput="emuSet('width', this.value)">
+					<input type="range" min="0" max="1280" value="${env.width}" oninput="emuSet('width', parseInt(this.value))">
 				</td>
 			</tr>
 			<tr>
