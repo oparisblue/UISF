@@ -1,10 +1,11 @@
 class DataType {
 	
-	constructor(name, description, value, defaultValue = null) {
+	constructor(name, description, value, defaultValue = null, isInspectorEditable = true) {
 		this.name = name;
 		this.description = description;
 		this.setValue(value);
 		this.defaultValue = defaultValue == null ? value : defaultValue;
+		this.isInspectorEditable = isInspectorEditable;
 	}
 	
 	getValue() {}

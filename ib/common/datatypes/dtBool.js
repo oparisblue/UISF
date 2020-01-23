@@ -1,9 +1,5 @@
 class DTBool extends DataType {
 	
-	constructor(name, description, value, defaultValue = null) {
-		super(name, description, value, defaultValue);
-	}
-	
 	getValue() {
 		return this.value;
 	}
@@ -17,7 +13,7 @@ class DTBool extends DataType {
 		input.type = "checkbox";
 		input.checked = this.value;
 		input.addEventListener("click", ()=>{
-			comp.setField(field, new DTBool(this.name, this.description, input.checked, this.defaultValue));
+			comp.setField(field, new DTBool(this.name, this.description, input.checked, this.defaultValue, this.isInspectorEditable));
 		});
 		return input;
 	}
