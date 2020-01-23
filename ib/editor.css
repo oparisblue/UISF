@@ -120,6 +120,22 @@ body {
 	padding: 0 5px;
 }
 
+
+.constraintsBox {
+	display: flex;
+	flex-wrap: wrap;
+}
+.constraintRow {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.constraintRow > svg {
+	width: 33%;
+}
+
+
 .tagsSection {
 	width: 100%;
 	display: flex;
