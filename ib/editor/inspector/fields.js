@@ -1,4 +1,7 @@
 function inspectorFields(elem, comp) {
+	
+	let hasAtLeastOneField = false;
+	
 	let fieldsContainer = document.createElement("div");
 	fieldsContainer.classList.add("editorSection");
 	fieldsContainer.insertAdjacentHTML("beforeend", `<strong>Fields</strong>`);
@@ -14,8 +17,11 @@ function inspectorFields(elem, comp) {
 			right.appendChild(data.getInspector(field, this));
 			row.appendChild(right);
 			tbody.appendChild(row);
+			hasAtLeastOneField = true;
 		}
 	}
+	
+	if (!hasAtLeastOneField) return;
 	
 	table.appendChild(tbody);
 	fieldsContainer.appendChild(table);
