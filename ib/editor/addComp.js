@@ -1,3 +1,15 @@
+function openComponentLibrary() {
+	if ($("#overlay").style.display == "block") {
+		closeOverlay();
+		return;
+	}
+	$("#overlay").style.display = "block";
+	$("#componentLibrary").style.display = "block";	
+	$("#componentLibrarySearch").focus();
+	$("#componentLibrarySearch").value = "";
+	filterComponentLibrary();
+}
+
 function addCompToPage(comp) {
 	closeOverlay();
 	pageComponents[comp.id] = comp;
@@ -8,14 +20,6 @@ function addCompToPage(comp) {
 	comp.y = mouseY - (comp.getDefaultHeight() / 2);
 	redoLayout();
 	startDragging(comp, true, true, true);
-}
-
-function openComponentLibrary() {
-	$("#overlay").style.display = "block";
-	$("#componentLibrary").style.display = "block";	
-	$("#componentLibrarySearch").focus();
-	$("#componentLibrarySearch").value = "";
-	filterComponentLibrary();
 }
 
 function filterComponentLibrary() {
@@ -34,5 +38,13 @@ function filterComponentLibrary() {
 		}
 	}
 	$("#componentLibraryResults").innerHTML = html;
-	
 }
+
+window.addEventListener("keydown", (ev)=>{
+	let mac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+	if (ev.code == "KeyL" && ((mac && ev.metaKey) || (!mac && ev.ctrlKey))) {
+		ev.preventDefault();
+		ev.stopPropagation();
+		openComponentLibrary();
+	}
+});

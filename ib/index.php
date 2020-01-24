@@ -65,7 +65,7 @@
 			</button>
 			<button class="editorRightAlign" onclick="window.open('./manual.php')"><i class="mdi mdi-book-open-page-variant"></i> Manual</button>
 		</div>
-		<div id="overlay" onmousedown="closeOverlay();" oncontextmenu="return false;"></div>
+		<div id="overlay" onmousedown="closeOverlay();" oncontextmenu="return false;" style="display:none;"></div>
 		<div id="rightClickMenu" oncontextmenu="return false;"></div>
 		<canvas id="wires"></canvas>
 		<div id="componentLibrary">
