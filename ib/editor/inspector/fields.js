@@ -14,7 +14,7 @@ function inspectorFields(elem, comp) {
 			let row = document.createElement("tr");
 			row.insertAdjacentHTML("beforeend", `<td title="${data.description}">${data.name}:</td>`);
 			let right = document.createElement("td");
-			right.appendChild(data.getInspector(field, this));
+			right.appendChild(data.getInspector(field, comp));
 			row.appendChild(right);
 			tbody.appendChild(row);
 			hasAtLeastOneField = true;
