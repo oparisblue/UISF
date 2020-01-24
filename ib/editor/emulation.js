@@ -1,6 +1,5 @@
 function emulationPopup() {	
-	let popUp = openPopUp($(".emuButton"), 300, 240, false);
-	$("#popUp").innerHTML = `
+	openPopUp($(".emuButton"), 300, 240, false).innerHTML = `
 		<table class="emulateTable">
 			<tr>
 				<td>

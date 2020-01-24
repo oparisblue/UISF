@@ -11,20 +11,15 @@ class Tag {
 	}
 	
 	getColour() {
-		return '';
+		return "";
 	}
 	
-	/**
-	* @WARNING: You must include this in any new tag that extends this class.
-	* @return {num} -1 for an unlimated amount
-	* @return {num} >= 1 for a limated amount
-	*/
-	// static getMaxPerElement() {
-	// 	return -1;
-	// }
-	
 	getIcon() {
-		return '';
+		return "";
+	}
+	
+	static getMaxPerElement() {
+		return -1;
 	}
 }
 

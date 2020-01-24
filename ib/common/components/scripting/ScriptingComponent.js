@@ -10,4 +10,6 @@ class ScriptingComponent extends Component {
 	getDefaultWidth()  { return 100; }
 	getDefaultHeight() { return 100; }
 	
+	getInspector() { return [inspectorTitle, inspectorFields]; }
+	
 }

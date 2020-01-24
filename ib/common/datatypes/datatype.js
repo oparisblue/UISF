@@ -12,7 +12,7 @@ class DataType {
 	setValue() {}
 	
 	resetToDefault() {
-		return new this.constructor(this.name, this.description, this.defaultValue, this.defaultValue);
+		return new this.constructor(this.name, this.description, this.defaultValue, this.defaultValue, this.isInspectorEditable);
 	}
 	
 	getInspector(_field, _comp) { return document.createElement("div"); }

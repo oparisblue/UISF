@@ -13,7 +13,7 @@ class AnyElementTag extends Tag {
 	}
 	
 	static getMaxPerElement() {
-		return 1;
+		return -1;
 	}
 }
 

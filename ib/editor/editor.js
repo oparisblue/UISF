@@ -100,7 +100,7 @@ function editSelectNode(node) {
 
 function rebuildInspector() {
 	$("#tab0").innerHTML = "";
-	$("#tab0").appendChild(selectedElement.getInspector());
+	$("#tab0").appendChild(selectedElement.showInspector());
 }
 
 function closeOverlay() {
