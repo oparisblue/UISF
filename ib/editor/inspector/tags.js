@@ -101,7 +101,7 @@ function inspectorTags(elem, comp) {
 			
 			// Add the tag
 			if (idToAdd != null) {
-				comp.tags.push(idToAdd);
+				comp.addTag(idToAdd);
 				rebuildInspector();
 				closeOverlay();
 			}
