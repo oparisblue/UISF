@@ -12,6 +12,7 @@ class EquationParser {
 			"/":      (p, q) => p / q,
 			"^":      (p, q) => Math.pow(p, q),
 			"%":      (p, q) => p % q,
+			"#":      (p)    => -p,
 			"fact(":  (p)    => [...Array(p + 1).keys()].slice(1).reduce((acc, val)=>acc * val, 1),
 			"sin(":   (p)    => Math.sin(p),
 			"cos(":   (p)    => Math.cos(p),
@@ -33,6 +34,7 @@ class EquationParser {
 		let funcCounter = 0;
 		let tokens = ["+", "-", "*", "/", "%", "^", "(", ")"];
 		let funcs = ["abs(", "sin(", "cos(", "tan(", "sqrt(", "ceil(", "floor(", "round(", "fact("];
+		let isNegate = true;
 		// Loop through the equation string
 		for (let i = 0; i < this.equation.length; i++) {
 			let char = this.equation[i];
@@ -50,13 +52,17 @@ class EquationParser {
 				if (typeState == "num") this.tokenList[this.tokenList.length - 1] += char;
 				else this.tokenList.push(char);
 				typeState = "num";
+				isNegate = false;
 			// If the character is a token, add it to the array
 			} else if (tokens.includes(char)) {
-				this.tokenList.push(char);
+				console.log(isNegate);
+				this.tokenList.push(char == '-' && isNegate ? "#" : char);
 				typeState = "opp";
+				isNegate = char != ")";
 			// If the character is apart of a function, 
 			} else if (funcs.filter((func) => func.indexOf(char) == 0).length > 0) {
 				typeState = "func";
+				isNegate = true;
 				let finalFunc = false;
 				// Check if it is exactly the same as any of the function names
 				for (let j = 0; j < funcs.length; j++) if (funcs[j] == char) finalFunc = true;
@@ -90,6 +96,7 @@ class EquationParser {
 			"/":      3,
 			"^":      2,
 			"%":      2,
+			"#":      1,
 		}
 		
 		// 1. While there are tokens to be read:
@@ -146,15 +153,18 @@ class EquationParser {
 		let stack = [];
 		for (let token of this.rpn) {
 			// if token is an operator
-			//     pop off n items from the stack (where n is the amount of args the operator takes)
-			//     pass those values to the operator and push the operator's response onto the stack
-			//     e.g.
-			//
-			//     let n = this.rpnOps[op].length;
-			//	   stack.push(this.rpnOps[op](...stack.slice(-n)));
-			//
-			// otherwise
-			//     just push the number onto the stack
+			if (this.rpnOps.hasOwnProperty(token)) {
+				// pop off n items from the stack (where n is the amount of args the operator takes)
+				// pass those values to the operator
+				let n = this.rpnOps[token].length;
+				let args = stack.slice(-n);
+				stack = stack.slice(0, -n);
+				// and push the operator's response onto the stack
+				stack.push(this.rpnOps[token](...args));
+			}
+			// otherwise ust push the number onto the stack
+			else stack.push(parseFloat(token));
+
 			// doesn't account for variables / negative numbers idk
 		}
 		return stack.pop();
@@ -167,13 +177,16 @@ class EquationParser {
 }
 
 function testHelper() {
-	let inst = new EquationParser("1+5)").makeTokenList();
+	let inst = new EquationParser("5+-10").makeTokenList();
 	
 	console.log("Step 1:", inst.tokenList);
 	
 	inst.toRPN();
 	
 	console.log("Step 2:", inst.rpn);
+	
+	console.log("Step 3:", inst.evaluateRPN());
+	
 	
 }
 
