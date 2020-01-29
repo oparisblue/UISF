@@ -6,24 +6,24 @@ class EquationParser {
 		this.rpn = [];
 		
 		this.rpnOps = {
-			"#":      {val: 1, func: (p)    => -p},
-			"^":      {val: 2, func: (p, q) => Math.pow(p, q)},
-			"%":      {val: 2, func: (p, q) => p % q},
-			"*":      {val: 3, func: (p, q) => p * q},
-			"/":      {val: 3, func: (p, q) => p / q},
-			"+":      {val: 4, func: (p, q) => p + q},
-			"-":      {val: 4, func: (p, q) => p - q},
-			"fact(":  {val: 6, func: (p)    => [...Array(p + 1).keys()].slice(1).reduce((acc, val)=>acc * val, 1)},
-			"sin(":   {val: 6, func: (p)    => Math.sin(p)},
-			"cos(":   {val: 6, func: (p)    => Math.cos(p)},
-			"tan(":   {val: 6, func: (p)    => Math.tan(p)},
-			"deg(":   {val: 6, func: (p)    => (p * 180) / Math.PI},
-			"rad(":   {val: 6, func: (p)    => (p * Math.PI) * 180},
-			"ceil(":  {val: 6, func: (p)    => Math.ceil(p)},
-			"floor(": {val: 6, func: (p)    => Math.floor(p)},
-			"round(": {val: 6, func: (p)    => Math.round(p)},
-			"abs(":   {val: 6, func: (p)    => Math.abs(p)},
-			"sqrt(":  {val: 6, func: (p)    => Math.sqrt(p)},
+			"#":      { val: 1, func: (p)    => -p },
+			"^":      { val: 2, func: (p, q) => Math.pow(p, q) },
+			"%":      { val: 2, func: (p, q) => p % q },
+			"*":      { val: 3, func: (p, q) => p * q },
+			"/":      { val: 3, func: (p, q) => p / q },
+			"+":      { val: 4, func: (p, q) => p + q },
+			"-":      { val: 4, func: (p, q) => p - q },
+			"fact(":  { val: 6, func: (p)    => [...Array(p + 1).keys()].slice(1).reduce((acc, val)=>acc * val, 1) },
+			"sin(":   { val: 6, func: (p)    => Math.sin(p) },
+			"cos(":   { val: 6, func: (p)    => Math.cos(p) },
+			"tan(":   { val: 6, func: (p)    => Math.tan(p) },
+			"deg(":   { val: 6, func: (p)    => (p * 180) / Math.PI },
+			"rad(":   { val: 6, func: (p)    => (p * Math.PI) * 180 },
+			"ceil(":  { val: 6, func: (p)    => Math.ceil(p) },
+			"floor(": { val: 6, func: (p)    => Math.floor(p) },
+			"round(": { val: 6, func: (p)    => Math.round(p) },
+			"abs(":   { val: 6, func: (p)    => Math.abs(p) },
+			"sqrt(":  { val: 6, func: (p)    => Math.sqrt(p) }
 		};
 	}
 	
@@ -146,7 +146,9 @@ class EquationParser {
 			// otherwise ust push the number onto the stack
 			else stack.push(parseFloat(token));
 
-			// doesn't account for variables / negative numbers idk
+			/**
+			* @FIXME: doesn't account for variables
+			*/
 		}
 		return stack.pop();
 	}
