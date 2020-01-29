@@ -17,8 +17,8 @@ class EquationParser {
 			"sin(":   { val: 6, func: (p)    => Math.sin(p) },
 			"cos(":   { val: 6, func: (p)    => Math.cos(p) },
 			"tan(":   { val: 6, func: (p)    => Math.tan(p) },
-			"deg(":   { val: 6, func: (p)    => (p * 180) / Math.PI },
-			"rad(":   { val: 6, func: (p)    => (p * Math.PI) * 180 },
+			"rad(":   { val: 6, func: (p)    => p * (Math.PI / 180) },
+			"deg(":   { val: 6, func: (p)    => p * (180 / Math.PI) },
 			"ceil(":  { val: 6, func: (p)    => Math.ceil(p) },
 			"floor(": { val: 6, func: (p)    => Math.floor(p) },
 			"round(": { val: 6, func: (p)    => Math.round(p) },
@@ -31,8 +31,8 @@ class EquationParser {
 	makeTokenList() {
 		let typeState = "";
 		let funcCounter = 0;
-		let tokens = ["+", "-", "*", "/", "%", "^", "(", ")"];
-		let funcs = ["abs(", "sin(", "cos(", "tan(", "sqrt(", "ceil(", "floor(", "round(", "fact("];
+		let tokens = Object.keys(this.rpnOps).filter(x=>x.length == 1);
+		let funcs  = Object.keys(this.rpnOps).filter(x=>x.length >  1);
 		let isNegate = true;
 		// Loop through the equation string
 		for (let i = 0; i < this.equation.length; i++) {
