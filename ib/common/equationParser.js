@@ -6,26 +6,25 @@ class EquationParser {
 		this.rpn = [];
 		
 		this.rpnOps = {
-			"+":      (p, q) => p + q,
-			"-":      (p, q) => p - q,
-			"*":      (p, q) => p * q,
-			"/":      (p, q) => p / q,
-			"^":      (p, q) => Math.pow(p, q),
-			"%":      (p, q) => p % q,
-			"#":      (p)    => -p,
-			"fact(":  (p)    => [...Array(p + 1).keys()].slice(1).reduce((acc, val)=>acc * val, 1),
-			"sin(":   (p)    => Math.sin(p),
-			"cos(":   (p)    => Math.cos(p),
-			"tan(":   (p)    => Math.tan(p),
-			"deg(":   (p)    => (p * 180) / Math.PI,
-			"rad(":   (p)    => (p * Math.PI) * 180,
-			"ceil(":  (p)    => Math.ceil(p),
-			"floor(": (p)    => Math.floor(p),
-			"round(": (p)    => Math.round(p),
-			"abs(":   (p)    => Math.abs(p),
-			"sqrt(":  (p)    => Math.sqrt(p),
+			"#":      {val: 1, func: (p)    => -p},
+			"^":      {val: 2, func: (p, q) => Math.pow(p, q)},
+			"%":      {val: 2, func: (p, q) => p % q},
+			"*":      {val: 3, func: (p, q) => p * q},
+			"/":      {val: 3, func: (p, q) => p / q},
+			"+":      {val: 4, func: (p, q) => p + q},
+			"-":      {val: 4, func: (p, q) => p - q},
+			"fact(":  {val: 6, func: (p)    => [...Array(p + 1).keys()].slice(1).reduce((acc, val)=>acc * val, 1)},
+			"sin(":   {val: 6, func: (p)    => Math.sin(p)},
+			"cos(":   {val: 6, func: (p)    => Math.cos(p)},
+			"tan(":   {val: 6, func: (p)    => Math.tan(p)},
+			"deg(":   {val: 6, func: (p)    => (p * 180) / Math.PI},
+			"rad(":   {val: 6, func: (p)    => (p * Math.PI) * 180},
+			"ceil(":  {val: 6, func: (p)    => Math.ceil(p)},
+			"floor(": {val: 6, func: (p)    => Math.floor(p)},
+			"round(": {val: 6, func: (p)    => Math.round(p)},
+			"abs(":   {val: 6, func: (p)    => Math.abs(p)},
+			"sqrt(":  {val: 6, func: (p)    => Math.sqrt(p)},
 		};
-		
 	}
 	
 	// String => List of Tokens
@@ -80,24 +79,6 @@ class EquationParser {
 	toRPN() {
 		let operatorsStack = [];
 		let operatorsValues = [];
-		let operators = {
-			"abs(":   6,
-			"sin(":   6,
-			"cos(":   6,
-			"tan(":   6,
-			"sqrt(":  6,
-			"ceil(":  6,
-			"floor(": 6,
-			"round(": 6,
-			"fact(":  6,
-			"+":      4,
-			"-":      4,
-			"*":      3,
-			"/":      3,
-			"^":      2,
-			"%":      2,
-			"#":      1,
-		}
 		
 		// 1. While there are tokens to be read:
 		// 2. Read a token
@@ -105,16 +86,16 @@ class EquationParser {
 			// 3. If it's a number add it to queue
 			if (!isNaN(value)) this.rpn.push(value);
 			// 4. If it's an operator
-			else if (operators.hasOwnProperty(value)) {
+			else if (this.rpnOps.hasOwnProperty(value)) {
 				// 5. While there's an operator on the top of the stack with greater or equal precedence:
-				while (operatorsValues[operatorsValues.length - 1] <= operators[value] && operators[value] != 6) {
+				while (operatorsValues[operatorsValues.length - 1] <= this.rpnOps[value].val && this.rpnOps[value].val != 6) {
 					// 6. Pop operators from the stack onto the output queue
 					this.rpn.push(operatorsStack.pop());
 					operatorsValues.pop();
 				}
 				// 7. Push the current operator onto the stack
 				operatorsStack.push(value);
-				operatorsValues.push(operators[value]);
+				operatorsValues.push(this.rpnOps[value].val);
 			}
 			// 8. If it's a left bracket push it onto the stack
 			else if (value == "(") {
@@ -156,11 +137,11 @@ class EquationParser {
 			if (this.rpnOps.hasOwnProperty(token)) {
 				// pop off n items from the stack (where n is the amount of args the operator takes)
 				// pass those values to the operator
-				let n = this.rpnOps[token].length;
+				let n = this.rpnOps[token].func.length;
 				let args = stack.slice(-n);
 				stack = stack.slice(0, -n);
 				// and push the operator's response onto the stack
-				stack.push(this.rpnOps[token](...args));
+				stack.push(this.rpnOps[token].func(...args));
 			}
 			// otherwise ust push the number onto the stack
 			else stack.push(parseFloat(token));
@@ -173,7 +154,6 @@ class EquationParser {
 	static parseEquation(equation) {
 		return new EquationParser(equation).makeTokenList().toRPN().evaluateRPN();
 	}
-	
 }
 
 function testHelper() {
@@ -186,8 +166,6 @@ function testHelper() {
 	console.log("Step 2:", inst.rpn);
 	
 	console.log("Step 3:", inst.evaluateRPN());
-	
-	
 }
 
 testHelper();
