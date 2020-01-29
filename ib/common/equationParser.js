@@ -4,6 +4,27 @@ class EquationParser {
 		this.equation = equation;
 		this.tokenList = [];
 		this.rpn = [];
+		
+		this.rpnOps = {
+			"+":      (p, q) => p + q,
+			"-":      (p, q) => p - q,
+			"*":      (p, q) => p * q,
+			"/":      (p, q) => p / q,
+			"^":      (p, q) => Math.pow(p, q),
+			"%":      (p, q) => p % q,
+			"fact(":  (p)    => [...Array(p + 1).keys()].slice(1).reduce((acc, val)=>acc * val, 1),
+			"sin(":   (p)    => Math.sin(p),
+			"cos(":   (p)    => Math.cos(p),
+			"tan(":   (p)    => Math.tan(p),
+			"deg(":   (p)    => (p * 180) / Math.PI,
+			"rad(":   (p)    => (p * Math.PI) * 180,
+			"ceil(":  (p)    => Math.ceil(p),
+			"floor(": (p)    => Math.floor(p),
+			"round(": (p)    => Math.round(p),
+			"abs(":   (p)    => Math.abs(p),
+			"sqrt(":  (p)    => Math.sqrt(p),
+		};
+		
 	}
 	
 	// String => List of Tokens
@@ -33,7 +54,21 @@ class EquationParser {
 	
 	// RPN => Result
 	evaluateRPN() {
-		return 0;
+		let stack = [];
+		for (let token of this.rpn) {
+			// if token is an operator
+			//     pop off n items from the stack (where n is the amount of args the operator takes)
+			//     pass those values to the operator and push the operator's response onto the stack
+			//     e.g.
+			//
+			//     let n = this.rpnOps[op].length;
+			//	   stack.push(this.rpnOps[op](...stack.slice(-n)));
+			//
+			// otherwise
+			//     just push the number onto the stack
+			// doesn't account for variables / negative numbers idk
+		}
+		return stack.pop();
 	}
 	
 	static parseEquation(equation) {
