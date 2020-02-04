@@ -5,6 +5,10 @@ class EVScreenWidth extends EnvironmentVariable {
 		this.size = size;
 	}
 	
+	toJSON() {
+		return {name: "screenWidth", size: this.size, properties: this.properties};
+	}
+	
 	predicate() {
 		return env.doWidth && env.width <= this.size;
 	}

@@ -34,6 +34,10 @@ class ComponentButton extends Component {
 		}
 	}
 	
+	getComponentName() {
+		return "button";
+	}
+	
 	static getEditorInfo() {
 		return {
 			name: "Button",

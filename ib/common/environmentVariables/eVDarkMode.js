@@ -5,6 +5,10 @@ class EVDarkMode extends EnvironmentVariable {
 		this.shouldBeTrue = shouldBeTrue;
 	}
 	
+	toJSON() {
+		return {name: "darkMode", shouldBeTrue: this.shouldBeTrue, properties: this.properties};
+	}
+	
 	predicate() {
 		return env.doDarkMode && env.isDarkMode;
 	}

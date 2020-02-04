@@ -18,6 +18,10 @@ class ComponentPI extends ScriptingComponent {
 		this.build();
 	}
 	
+	getComponentName() {
+		return "pi";
+	}
+	
 	static getEditorInfo() {
 		return {
 			name: "PI",
@@ -38,6 +42,10 @@ class ComponentTrue extends ScriptingComponent {
 		};
 		
 		this.build();
+	}
+	
+	getComponentName() {
+		return "true";
 	}
 	
 	static getEditorInfo() {
@@ -62,6 +70,10 @@ class ComponentFalse extends ScriptingComponent {
 		this.build();
 	}
 	
+	getComponentName() {
+		return "false";
+	}
+	
 	static getEditorInfo() {
 		return {
 			name: "False",
@@ -84,6 +96,10 @@ class ComponentPositiveInfinity extends ScriptingComponent {
 		this.build();
 	}
 	
+	getComponentName() {
+		return "positiveInfinity";
+	}
+	
 	static getEditorInfo() {
 		return {
 			name: "Positive Infinity",
@@ -104,6 +120,10 @@ class ComponentNegitiveInfinity extends ScriptingComponent {
 		};
 		
 		this.build();
+	}
+	
+	getComponentName() {
+		return "negitiveInfinity";
 	}
 	
 	static getEditorInfo() {

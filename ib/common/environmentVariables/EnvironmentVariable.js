@@ -8,6 +8,14 @@ class EnvironmentVariable {
 	// Abstract methods
 	
 	/**
+	* Returns a representation of this environment variable and its properties
+	* e.g. the name of the variable, and any associated data
+	*/
+	toJSON() {
+		return {};
+	}
+	
+	/**
 	* Should this variable be applied - e.g. does it match the current environment?
 	* @return <code>true</code> = should apply, <code>false</code> = don't apply.
 	*/

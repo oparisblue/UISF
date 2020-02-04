@@ -21,6 +21,10 @@ class ComponentRandom extends ScriptingComponent {
 		this.fields.OUTPUT.value = (Math.random() * (this.fields.MAX.value - this.fields.MIN.value)) + this.fields.MIN.value;
 	}
 	
+	getComponentName() {
+		return "random";
+	}
+	
 	static getEditorInfo() {
 		return {
 			name: "Random",

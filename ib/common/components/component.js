@@ -163,6 +163,7 @@ class Component {
 	getDefaultWidth()      { return 0;  }
 	getDefaultHeight()     { return 0;  }
 	onTick()               {            }
+	getComponentName()     {return "";  }
 	
 	// Concrete
 	
@@ -195,13 +196,13 @@ class Component {
 	
 	addChild(child) {
 		this.children.push(child);
-		this.domNode.appendChild(child.domNode);
+		this.domNode.appendChild(pageComponents[child].domNode);
 		child.parent = this;
 	}
 	
 	removeChild(child) {
 		this.children.splice(this.children.indexOf(child), 1);
-		this.domNode.remove(child);
+		this.domNode.remove(pageComponents[child].domNode);
 	}
 	
 	onUpdateTick() {
@@ -262,7 +263,7 @@ class Component {
 		}
 		
 		// Tick children
-		for (let child of this.children) child.onUpdateTick();
+		for (let child of this.children) pageComponents[child].onUpdateTick();
 		
 	}
 	
@@ -314,7 +315,6 @@ class Component {
 		}
 		
 		this.hasChanged = true;
-		console.log(this.evs[chosenEv]);
 	}
 	
 	toggleConstraint(id) {
