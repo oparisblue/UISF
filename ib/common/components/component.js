@@ -314,7 +314,6 @@ class Component {
 		}
 		
 		this.hasChanged = true;
-		console.log(this.evs[chosenEv]);
 	}
 	
 	toggleConstraint(id) {

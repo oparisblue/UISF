@@ -1,11 +1,11 @@
-class Math extends ScriptingComponent {
+class Equation extends ScriptingComponent {
 	
 	constructor(x, y) {
 		super(x, y);
 		
 		this.fields = {
-			EQUATION: new DTString("Equation", "A math equation", null , null, true),
-			OUTPUT: new DTNumber("Output", "The reult of the equation", null, null, false),
+			EQUATION: new DTString("Equation", "A math equation", "", SHOW_IN_INSPECTOR),
+			OUTPUT: new DTNumber("Output", "The reult of the equation", 0, SHOW_IN_OUTLETS)
 		};
 		
 		this.build();
@@ -15,7 +15,7 @@ class Math extends ScriptingComponent {
 	* @override
 	*/
 	onTick() {
-		this.fields.OUTPUT.value = EquationParser.parseEquation(this.fields.EQUATION);
+		this.fields.OUTPUT.value = EquationParser.parseEquation(this.fields.EQUATION.getValue());
 	}
 	
 	static getEditorInfo() {
@@ -26,4 +26,4 @@ class Math extends ScriptingComponent {
 	}
 }
 
-components.math = Math;
+components.equation = Equation;
