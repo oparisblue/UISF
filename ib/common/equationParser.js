@@ -13,7 +13,7 @@ class EquationParser {
 			"/":      { val: 3, func: (p, q) => p / q },
 			"+":      { val: 4, func: (p, q) => p + q },
 			"-":      { val: 4, func: (p, q) => p - q },
-			"fact(":  { val: 6, func: (p)    => [...Array(p + 1).keys()].slice(1).reduce((acc, val)=>acc * val, 1) },
+			"fact(":  { val: 6, func: (p)    => [...Array(p + 1).keys()].slice(1).reduce((acc, val) => acc * val, 1) },
 			"sin(":   { val: 6, func: (p)    => Math.sin(p) },
 			"cos(":   { val: 6, func: (p)    => Math.cos(p) },
 			"tan(":   { val: 6, func: (p)    => Math.tan(p) },
@@ -31,8 +31,8 @@ class EquationParser {
 	makeTokenList() {
 		let typeState = "";
 		let funcCounter = 0;
-		let tokens = Object.keys(this.rpnOps).filter(x=>x.length == 1);
-		let funcs  = Object.keys(this.rpnOps).filter(x=>x.length >  1);
+		let tokens = Object.keys(this.rpnOps).filter(x => x.length == 1);
+		let funcs  = Object.keys(this.rpnOps).filter(x => x.length >  1);
 		let isNegate = true;
 		// Loop through the equation string
 		for (let i = 0; i < this.equation.length; i++) {
@@ -123,7 +123,7 @@ class EquationParser {
 			}
 		}
 		// 13. While there are operators on the stack, pop them to the queue
-		for (let i = operatorsStack.length - 1; i >=0; i--) this.rpn.push(operatorsStack[i]);
+		for (let i = operatorsStack.length - 1; i >= 0; i--) this.rpn.push(operatorsStack[i]);
 		
 		return this;
 	}
