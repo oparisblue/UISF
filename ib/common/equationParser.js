@@ -153,6 +153,7 @@ class EquationParser {
 	}
 	
 	static parseEquation(equation) {
-		return new EquationParser(equation).makeTokenList().toRPN().evaluateRPN();
+		if (equation) return new EquationParser(equation).makeTokenList().toRPN().evaluateRPN();
+		else return null;
 	}
 }
