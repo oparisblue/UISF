@@ -13,9 +13,7 @@ function render() {
 	
 	for (let k of Object.keys(pageComponents)) {	
 		let component = pageComponents[k];
-		if (envHasChanged) {
-			component.hasChanged = true;
-		}
+		component.envHasChanged = envHasChanged;
 		if (component.active && component.parent == null) component.onUpdateTick();
 	}
 	

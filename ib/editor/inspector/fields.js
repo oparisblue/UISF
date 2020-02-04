@@ -10,7 +10,7 @@ function inspectorFields(elem, comp) {
 	let tbody = document.createElement("tbody");
 	for (let field of Object.keys(comp.fields)) {
 		let data = comp.fields[field];
-		if (data.isInspectorEditable) {
+		if (data.showInInspector()) {
 			let row = document.createElement("tr");
 			row.insertAdjacentHTML("beforeend", `<td title="${data.description}">${data.name}:</td>`);
 			let right = document.createElement("td");

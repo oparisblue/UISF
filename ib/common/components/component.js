@@ -21,9 +21,11 @@ class Component {
 		this.eventListeners = [];
 		this.outlets = [];
 		this.tags = [];
+		this.wireType = new EVWire();
     
 		// Has something changed? Calls for rebuild of element DOM + this.outlets + this.eventListeners.
 		this.hasChanged = true;
+		this.envHasChanged = false;
 		
 		// Build the dom node wrapper for the element
 		
@@ -60,6 +62,7 @@ class Component {
 					
 					let inletHTML = ``;
 					for (let k of Object.keys(this.fields)) {
+						if (!this.fields[k].showInInlets()) continue;
 						let field = this.fields[k];
 						inletHTML += `
 							<div class="inletRow" title="${field.description}" onmouseup="editorWireTo(${this.id}, 'inlet', '${k}')">
@@ -104,6 +107,7 @@ class Component {
 				
 				let outletHTML = ``;
 				for (let k of Object.keys(this.fields)) {
+					if (!this.fields[k].showInOutlets()) continue;
 					let field = this.fields[k];
 					outletHTML += `
 						<div title="${field.description}">
@@ -162,6 +166,10 @@ class Component {
 	
 	// Concrete
 	
+	/**
+	* @FIXME: Remove this method / merge with .build().
+	* Do we want to always add a new element to the dom node?
+	*/
 	registerElement(ele) {
 		if (IN_EDIT_MODE) ele.style.pointerEvents = "none";
 		this.domNode.appendChild(ele);
@@ -172,7 +180,7 @@ class Component {
 	}
 	
 	addConstraint(constraint) {
-		this.setField(constraint.getType(), constraint, "constraint");
+		this.setField(constraint.type, constraint, "constraint");
 	}
 	
 	addWire(fromName, type, toId, toName) {
@@ -198,8 +206,14 @@ class Component {
 	
 	onUpdateTick() {
 		// If there have been changes, reduce the environment variables into values
-		if (this.hasChanged) {
+		if (this.hasChanged || this.envHasChanged) {
 			let lst = [];
+			
+			// If this is an environment change, clear all the wired values
+			if (this.envHasChanged) {
+				this.hasChanged = true;
+				this.wireType = new EVWire();
+			}
 			
 			// Build the by applying each environment variable to it
 			// They deal with fighting over properties, etc. We just get the array
@@ -213,14 +227,13 @@ class Component {
 			this.eventListeners = [];
 			this.constraints = [];
 			this.tags = [];
-			for (let k of Object.keys(this.fields)) {
-				this.fields[k] = this.fields[k].resetToDefault();
-			}
+			for (let k of Object.keys(this.fields)) this.fields[k].resetToDefault();
 			
 			// Now, set these values using the flattened environment variable values
 			for (let p of lst) {
-				if (p.type == "field" || p.type == "constraint") this[p.type + "s"][p.name] = p.value;
-				else                                             this[p.type + "s"].push(p.value);
+				if (p.type == "field")            this.fields[p.name].setValue(p.value);
+				else if (p.type == "constraints") this.constraints[p.name] = p.value;
+				else                              this[p.type + "s"].push(p.value);
 			}
 		}
 		
@@ -241,10 +254,10 @@ class Component {
 		// Wires
 		for (let o of this.outlets) {
 			if (o.type == "outlets") {
-				pageComponents[o.toId].setField(o.toName, this.fields[o.fromName], "field", WIRE_TYPE);
+				pageComponents[o.toId].setField(o.toName, this.fields[o.fromName].getValue(), "field", this.wireTYpe);
 			}
 			else { // e.g. o.type = constraint
-				pageComponents[o.toId].setField(o.toName, this.constraints[o.fromName], "constraint", WIRE_TYPE);
+				pageComponents[o.toId].setField(o.toName, this.constraints[o.fromName], "constraint", this.wireType);
 			}
 		}
 		
@@ -267,16 +280,23 @@ class Component {
 		// Sets the field using the environment variable for the current emulation state;
 		// or make a new environment variable which matches it.
 		
+		if (value instanceof DataType) {
+			console.error("ONLY pass VALUES to setField, not objects!\nYour call is illegal - as such I haven't modified anything...");
+			console.trace();
+			return;
+		}
+		
 		let chosenEv = -1;
 		if (target == null) target = evFromEmulation();
 		
 		for (let i = 0; i < this.evs.length; i++) {
 			if (this.evs[i].equiv(target)) {
-				if (
-					this.evs[i].properties.hasOwnProperty(field) &&
-					this.evs[i].properties[field].value == value
-				) {
-					return;
+				let prop = this.evs[i].properties[field];
+				// Only change the field if the value is not the same as the current one
+				// - otherwise its a wasted rebuild!
+				if (prop) {
+					if (prop instanceof DataType && prop.getValue() == prop.parseValue(value)) return;
+					else if (JSON.stringify(prop) == JSON.stringify(value)) return;
 				}
 				chosenEv = i;
 				break;
@@ -294,6 +314,7 @@ class Component {
 		}
 		
 		this.hasChanged = true;
+		console.log(this.evs[chosenEv]);
 	}
 	
 	toggleConstraint(id) {
@@ -319,7 +340,7 @@ class Component {
 	}
 	
 	getInspector() {
-		return [inspectorTitle, inspectorSizeAndPosition, inspectorTags, inspectorFields]
+		return [inspectorTitle, inspectorSizeAndPosition, inspectorTags, inspectorFields];
 	}
 	
 	/**
@@ -327,8 +348,8 @@ class Component {
 	*/
 	build() {		
 		// Width + Height constants
-		this.setField("width", new ConstraintWidth(this.getDefaultWidth()),  "constraint", new EVNormal());
-		this.setField("height", new ConstraintHeight(this.getDefaultHeight()), "constraint", new EVNormal());
+		this.setField("width",  Constraint.width(this.getDefaultWidth()),   "constraint", new EVNormal());
+		this.setField("height", Constraint.height(this.getDefaultHeight()), "constraint", new EVNormal());
 	}
 	
 	startLayout() {
@@ -340,7 +361,7 @@ class Component {
 		
 		let realisedConstraints = {};
 		for (let k of Object.keys(this.constraints)) {
-			realisedConstraints[this.constraints[k].getType()] = {
+			realisedConstraints[this.constraints[k].type] = {
 				c:        this.constraints[k],
 				resolved: false
 			}

@@ -1,180 +1,35 @@
-class ComponentEquals extends ScriptingComponent {
-	
-	constructor(x, y) {
-		super(x, y);
+function makeEqualityComp(id, name, desc, check, inputType) {
+	components[id] = class extends ScriptingComponent {
+		constructor(x, y) {
+			super(x, y);
+			
+			this.check = check;
+			
+			this.fields = {
+				INPUT_ONE: new inputType("p", `The first input`,  null, SHOW_IN_INSPECTOR + SHOW_IN_INLETS),
+				INPUT_TWO: new inputType("q", `The second input`, null, SHOW_IN_INSPECTOR + SHOW_IN_INLETS),
+				OUTPUT:    new DTBool("Output", "True if " + desc, false, SHOW_IN_OUTLETS)
+			};
+			
+			this.build();
+		}
 		
-		this.fields = {
-			INPUT_ONE: new DTNumber("Input One", `The first input. Default 0`, 0, 0, true),
-			INPUT_TWO: new DTNumber("Input Two", `The second input. Default 1`, 1, 1, true),
-			OUTPUT: new DTBool("Output", `Returns true or false depending on Input One and Two`, false, false, false)
-		};
+		onTick() {
+			this.fields.OUTPUT.value = this.check(this.fields.INPUT_ONE.value, this.fields.INPUT_TWO.value);
+		}
 		
-		this.build();
-	}
-	
-	/**
-	* @override
-	*/
-	onTick() {
-		this.fields.OUTPUT.value = this.fields.INPUT_ONE.value == this.fields.INPUT_TWO.value;
-	}
-	
-	static getEditorInfo() {
-		return {
-			name: "Equal To",
-			description: `Checks if Input One is equal to Input Two`
+		static getEditorInfo() {
+			return {
+				name: name,
+				description: "Checks if " + desc
+			}
 		}
 	}
 }
 
-class ComponentNotEquals extends ScriptingComponent {
-	
-	constructor(x, y) {
-		super(x, y);
-		
-		this.fields = {
-			INPUT_ONE: new DTNumber("Input One", `The first input. Default 0`, 0, 0, true),
-			INPUT_TWO: new DTNumber("Input Two", `The second input. Default 1`, 0, 0, true),
-			OUTPUT: new DTBool("Output", `Returns true or false depending on Input One and Two`, false, false, false)
-		};
-		
-		this.build();
-	}
-	
-	/**
-	* @override
-	*/
-	onTick() {
-		this.fields.OUTPUT.value = this.fields.INPUT_ONE.value != this.fields.INPUT_TWO.value;
-	}
-	
-	static getEditorInfo() {
-		return {
-			name: "Not Equal To",
-			description: `Checks if Input One is not equal to Input Two`
-		}
-	}
-}
-
-class ComponentGreater extends ScriptingComponent {
-	
-	constructor(x, y) {
-		super(x, y);
-		
-		this.fields = {
-			INPUT_ONE: new DTNumber("Input One", `The first input. Default 0`, 0, 0, true),
-			INPUT_TWO: new DTNumber("Input Two", `The second input. Default 1`, 1, 1, true),
-			OUTPUT: new DTBool("Output", `Returns true or false depending on Input One and Two`, false, false, false)
-		};
-		
-		this.build();
-	}
-	
-	/**
-	* @override
-	*/
-	onTick() {
-		this.fields.OUTPUT.value = this.fields.INPUT_ONE.value > this.fields.INPUT_TWO.value;
-	}
-	
-	static getEditorInfo() {
-		return {
-			name: "Greater Than",
-			description: `Checks if Input One is greater than Input Two`
-		}
-	}
-}
-
-class ComponentGreaterEqual extends ScriptingComponent {
-	
-	constructor(x, y) {
-		super(x, y);
-		
-		this.fields = {
-			INPUT_ONE: new DTNumber("Input One", `The first input. Default 0`, 0, 0, true),
-			INPUT_TWO: new DTNumber("Input Two", `The second input. Default 1`, 1, 1, true),
-			OUTPUT: new DTBool("Output", `Returns true or false depending on Input One and Two`, false, false, false)
-		};
-		
-		this.build();
-	}
-	
-	/**
-	* @override
-	*/
-	onTick() {
-		this.fields.OUTPUT.value = this.fields.INPUT_ONE.value >= this.fields.INPUT_TWO.value;
-	}
-	
-	static getEditorInfo() {
-		return {
-			name: "Greater Than or Equal To",
-			description: `Checks if Input One is greater than or equal to Input Two`
-		}
-	}
-}
-
-class ComponentLess extends ScriptingComponent {
-	
-	constructor(x, y) {
-		super(x, y);
-		
-		this.fields = {
-			INPUT_ONE: new DTNumber("Input One", `The first input. Default 1`, 1, 1, true),
-			INPUT_TWO: new DTNumber("Input Two", `The second input. Default 0`, 0, 0, true),
-			OUTPUT: new DTBool("Output", `Returns true or false depending on Input One and Two`, false, false, false)
-		};
-		
-		this.build();
-	}
-	
-	/**
-	* @override
-	*/
-	onTick() {
-		this.fields.OUTPUT.value = this.fields.INPUT_ONE.value < this.fields.INPUT_TWO.value;
-	}
-	
-	static getEditorInfo() {
-		return {
-			name: "Less Than",
-			description: `Checks if Input One is less than Input Two`
-		}
-	}
-}
-
-class ComponentLessEqual extends ScriptingComponent {
-	
-	constructor(x, y) {
-		super(x, y);
-		
-		this.fields = {
-			INPUT_ONE: new DTNumber("Input One", `The first input. Default 1`, 1, 1, true),
-			INPUT_TWO: new DTNumber("Input Two", `The second input. Default 0`, 0, 0, true),
-			OUTPUT: new DTBool("Output", `Returns true or false depending on Input One and Two`, false, false, false)
-		};
-		
-		this.build();
-	}
-	
-	/**
-	* @override
-	*/
-	onTick() {
-		this.fields.OUTPUT.value = this.fields.INPUT_ONE.value <= this.fields.INPUT_TWO.value;
-	}
-	
-	static getEditorInfo() {
-		return {
-			name: "Less Than or Equal To",
-			description: `Checks if Input One is less than or equal to Input Two`
-		}
-	}
-}
-
-components.equals       = ComponentEquals;
-components.notEequals   = ComponentNotEquals;
-components.greater      = ComponentGreater;
-components.greaterEqual = ComponentGreaterEqual;
-components.less         = ComponentLess;
-components.lessEqual    = ComponentLessEqual;
+makeEqualityComp("eq",  "Equal",                    "p and q are equal",               (p, q)=>p == q, DTAny);
+makeEqualityComp("neq", "Not Equal",                "p and q are not equal",           (p, q)=>p != q, DTAny);
+makeEqualityComp("gt",  "Greater Than",             "p is greater than q",             (p, q)=>p >  q, DTNumber);
+makeEqualityComp("gte", "Greater Than or Equal To", "p is greater than or equal to q", (p, q)=>p >= q, DTNumber);
+makeEqualityComp("lt",  "Lesser Than",              "p is lesser than q",              (p, q)=>p <  q, DTNumber);
+makeEqualityComp("lte", "Lesser Than or Equal To",  "p is lesser than or equal to q",  (p, q)=>p <= q, DTNumber);

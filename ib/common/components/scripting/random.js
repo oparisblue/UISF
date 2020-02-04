@@ -3,12 +3,12 @@ class ComponentRandom extends ScriptingComponent {
 	constructor(x, y) {
 		super(x, y);
 		
-		this.random = (Math.random() * (1 - 0)) + 0;
+		this.random = 0;
 		
 		this.fields = {
-			INPUT_ONE: new DTNumber("Input One", `The first input. Default 0`, 0, 0, true),
-			INPUT_TWO: new DTNumber("Input Two", `The second input. Default 1`, 1, 1, true),
-			OUTPUT: new DTNumber("Output", `A random number bewteen Input One and Input Two`, 0, 0, false)
+			MIN:    new DTNumber("Minimum", `The smallest random number to generate`, 0),
+			MAX:    new DTNumber("Maximum", `The largest random number to generate`, 1),
+			OUTPUT: new DTNumber("Output", `A random number ranging between the minimum and the maximum`, 0)
 		};
 		
 		this.build();
@@ -18,13 +18,13 @@ class ComponentRandom extends ScriptingComponent {
 	* @override
 	*/
 	onTick() {
-		this.fields.OUTPUT.value = (Math.random() * (this.fields.INPUT_TWO.value - this.fields.INPUT_ONE.value)) + this.fields.INPUT_ONE.value;
+		this.fields.OUTPUT.value = (Math.random() * (this.fields.MAX.value - this.fields.MIN.value)) + this.fields.MIN.value;
 	}
 	
 	static getEditorInfo() {
 		return {
 			name: "Random",
-			description: `A random number every tick`
+			description: `Generates random numbers`
 		}
 	}
 }

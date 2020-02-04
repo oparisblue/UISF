@@ -37,7 +37,7 @@ class ComponentButton extends Component {
 	static getEditorInfo() {
 		return {
 			name: "Button",
-			description: "A button which can be clicked by the user."
+			description: "A button which can be clicked by the user"
 		}
 	}
 	

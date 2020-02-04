@@ -13,5 +13,3 @@ class EVWire extends EnvironmentVariable {
 	}
 	
 }
-
-const WIRE_TYPE = new EVWire();

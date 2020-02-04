@@ -1,12 +1,12 @@
-class DTNumber extends DataType {
+class DTAny extends DataType {
 	
 	parseValue(value) {
-		return parseFloat(value);
+		return value;
 	}
 	
 	getInspector(field, comp) {
 		let input = document.createElement("input");
-		input.type = "number";
+		input.type = "text";
 		input.value = this.value;
 		input.addEventListener("input", ()=>{
 			this.value = input.value;
@@ -16,10 +16,10 @@ class DTNumber extends DataType {
 	}
 	
 	getIcon() {
-		return `<i class="mdi mdi-alpha-n-box" style="color:#E91E63"></i>`;
+		return `<i class="mdi mdi-alpha-a-box" style="color:#009688"></i>`;
 	}
 	
 	getType() {
-		return "Number";
+		return "String";
 	}
 }

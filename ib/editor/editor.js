@@ -45,15 +45,15 @@ window.addEventListener("load", ()=>{
 	pageComponents[1] = btn2;
 	$("#main").appendChild(btn2.domNode);
 	
-	pageComponents["0"].addConstraint(new ConstraintAlign(Direction.LEFT, -1, 300));
-	pageComponents["0"].addConstraint(new ConstraintAlign(Direction.RIGHT, -1, 400));
-	pageComponents["0"].addConstraint(new ConstraintAlign(Direction.TOP, -1, 100));
-	pageComponents["0"].addConstraint(new ConstraintHeight(20));
+	pageComponents["0"].addConstraint(Constraint.align(Direction.LEFT, -1, 300));
+	pageComponents["0"].addConstraint(Constraint.align(Direction.RIGHT, -1, 400));
+	pageComponents["0"].addConstraint(Constraint.align(Direction.TOP, -1, 100));
+	pageComponents["0"].addConstraint(Constraint.height(20));
 	pageComponents["0"].onUpdateTick();
 	
-	pageComponents["1"].addConstraint(new ConstraintWidth(100));
-	pageComponents["1"].addConstraint(new ConstraintHeight(100));
-	pageComponents["1"].addConstraint(new ConstraintAlign(Direction.TOP, 0, 10));
+	pageComponents["1"].addConstraint(Constraint.width(100));
+	pageComponents["1"].addConstraint(Constraint.height(100));
+	pageComponents["1"].addConstraint(Constraint.align(Direction.TOP, 0, 10));
 	pageComponents["1"].onUpdateTick();
 	
 	redoLayout();

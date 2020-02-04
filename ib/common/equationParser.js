@@ -54,7 +54,6 @@ class EquationParser {
 				isNegate = false;
 			// If the character is a token, add it to the array
 			} else if (tokens.includes(char)) {
-				console.log(isNegate);
 				this.tokenList.push(char == '-' && isNegate ? "#" : char);
 				typeState = "opp";
 				isNegate = char != ")";
@@ -157,17 +156,3 @@ class EquationParser {
 		return new EquationParser(equation).makeTokenList().toRPN().evaluateRPN();
 	}
 }
-
-function testHelper() {
-	let inst = new EquationParser("5+-10").makeTokenList();
-	
-	console.log("Step 1:", inst.tokenList);
-	
-	inst.toRPN();
-	
-	console.log("Step 2:", inst.rpn);
-	
-	console.log("Step 3:", inst.evaluateRPN());
-}
-
-testHelper();

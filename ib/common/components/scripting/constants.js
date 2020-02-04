@@ -9,10 +9,10 @@ class ComponentPI extends ScriptingComponent {
 		const QUARTER_PI = PI / 4;
 		
 		this.fields = {
-			PI:         new DTNumber("PI",         `A constant value of ${PI}`,         PI,         null, false),
-			TWO_PI:     new DTNumber("Two PI",     `A constant value of ${TWO_PI}`,     TWO_PI,     null, false),
-			HALF_PI:    new DTNumber("Half PI",    `A constant value of ${HALF_PI}`,    HALF_PI,    null, false),
-			QUARTER_PI: new DTNumber("Quarter PI", `A constant value of ${QUARTER_PI}`, QUARTER_PI, null, false),
+			PI:         new DTNumber("PI",         `A constant value of ${PI}`,         PI,         SHOW_IN_OUTLETS),
+			TWO_PI:     new DTNumber("Two PI",     `A constant value of ${TWO_PI}`,     TWO_PI,     SHOW_IN_OUTLETS),
+			HALF_PI:    new DTNumber("Half PI",    `A constant value of ${HALF_PI}`,    HALF_PI,    SHOW_IN_OUTLETS),
+			QUARTER_PI: new DTNumber("Quarter PI", `A constant value of ${QUARTER_PI}`, QUARTER_PI, SHOW_IN_OUTLETS),
 		};
 		
 		this.build();
@@ -21,7 +21,7 @@ class ComponentPI extends ScriptingComponent {
 	static getEditorInfo() {
 		return {
 			name: "PI",
-			description: `A constant representing different values of PI.`
+			description: `A constant representing different values of PI`
 		}
 	}
 }
@@ -34,7 +34,7 @@ class ComponentTrue extends ScriptingComponent {
 		const TRUE = true;
 		
 		this.fields = {
-			TRUE: new DTBool("True", `A constant value of ${TRUE}`, TRUE, null, false)
+			TRUE: new DTBool("True", `A constant value of ${TRUE}`, TRUE, SHOW_IN_OUTLETS)
 		};
 		
 		this.build();
@@ -56,7 +56,7 @@ class ComponentFalse extends ScriptingComponent {
 		const FALSE = false;
 		
 		this.fields = {
-			FALSE: new DTBool("False", `A constant value of ${FALSE}`, FALSE, null, false)
+			FALSE: new DTBool("False", `A constant value of ${FALSE}`, FALSE, SHOW_IN_OUTLETS)
 		};
 		
 		this.build();
@@ -78,7 +78,7 @@ class ComponentPositiveInfinity extends ScriptingComponent {
 		const POSITIVE_INFINITY = Infinity;
 		
 		this.fields = {
-			POSITIVE_INFINITY: new DTNumber("Positive Infinity", `A constant value of ${POSITIVE_INFINITY}`, POSITIVE_INFINITY, null, false)
+			POSITIVE_INFINITY: new DTNumber("Positive Infinity", `A constant value of ${POSITIVE_INFINITY}`, POSITIVE_INFINITY, SHOW_IN_OUTLETS)
 		};
 		
 		this.build();
@@ -87,7 +87,7 @@ class ComponentPositiveInfinity extends ScriptingComponent {
 	static getEditorInfo() {
 		return {
 			name: "Positive Infinity",
-			description: `A constant representing positive Infinity`
+			description: `A constant representing +Infinity`
 		}
 	}
 }
@@ -100,7 +100,7 @@ class ComponentNegitiveInfinity extends ScriptingComponent {
 		const NEGITIVE_INFINITY = -Infinity;
 		
 		this.fields = {
-			NEGITIVE_INFINITY: new DTNumber("Negitive Infinity", `A constant value of ${NEGITIVE_INFINITY}`, NEGITIVE_INFINITY, null, false)
+			NEGITIVE_INFINITY: new DTNumber("Negitive Infinity", `A constant value of ${NEGITIVE_INFINITY}`, NEGITIVE_INFINITY, SHOW_IN_OUTLETS)
 		};
 		
 		this.build();
@@ -109,7 +109,7 @@ class ComponentNegitiveInfinity extends ScriptingComponent {
 	static getEditorInfo() {
 		return {
 			name: "Negitive Infinity",
-			description: `A constant representing negitive Infinity`
+			description: `A constant representing -Infinity`
 		}
 	}
 }

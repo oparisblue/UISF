@@ -1,11 +1,7 @@
 class DTString extends DataType {
 	
-	getValue() {
-		return this.value;
-	}
-	
-	setValue(value) {
-		this.value = value + "";
+	parseValue(value) {
+		return value + "";
 	}
 	
 	getInspector(field, comp) {
@@ -13,7 +9,8 @@ class DTString extends DataType {
 		input.type = "text";
 		input.value = this.value;
 		input.addEventListener("input", ()=>{
-			comp.setField(field, new DTString(this.name, this.description, input.value, this.defaultValue, this.isInspectorEditable));
+			this.value = input.value;
+			comp.setField(field, this.value);
 		});
 		return input;
 	}

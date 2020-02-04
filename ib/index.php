@@ -58,10 +58,6 @@
 			<button class="emuButton" onclick="emulationPopup();">
 				<div class="emuTitle"><i class="mdi mdi-monitor-screenshot"></i> Emulation</div>&#8203;
 				<span id="emuButtonEnvDisplay"><div class="emuTitle">none</div></span>
-				<!--<div class="emuScreenSize">width <= 500</div>
-				<div class="emuRights">Is Pro = true</div>
-				<div class="emuEnvVar">Edit Mode = true</div>
-				<div class="emuAccess">Light Mode = true</div>-->
 			</button>
 			<button class="editorRightAlign" onclick="window.open('./manual.php')"><i class="mdi mdi-book-open-page-variant"></i> Manual</button>
 		</div>
