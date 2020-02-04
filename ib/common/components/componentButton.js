@@ -19,6 +19,10 @@ class ComponentButton extends Component {
 			"pressed": {"name": "Pressed", "description": "Called when the button is pressed."}
 		};
 		
+		this.actions = {
+			"click": {"name": "Click", "description": "Perform the action which occurs when the button is clicked.", "func": ()=>{this.fireEvent("pressed")}}
+		}
+		
 		this.build();
 		
 	}

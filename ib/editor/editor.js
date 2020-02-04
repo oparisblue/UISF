@@ -96,7 +96,7 @@ function editSelectNode(node) {
 		node.domNode.classList.add("editorSelected");
 		
 		// Draw wires
-		console.log(node.outlets);
+		//console.log(node.outlets, node.);
 		
 		rebuildInspector();
 	}

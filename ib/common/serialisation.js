@@ -7,7 +7,7 @@ function saveToJSON() {
 	// Save components
 	for (let k of Object.keys(pageComponents)) {
 		let comp = pageComponents[k];
-		let compJSON = {type: comp.getComponentName(), evs: [], children: comp.children};
+		let compJSON = {type: comp.getComponentName(), evs: [], children: comp.children, x: comp.x, y: comp.y};
 		
 		for (let ev of comp.evs) {
 			compJSON.evs.push(ev.toJSON());
@@ -31,6 +31,8 @@ function loadFromJSON(json) {
 		let newComp = new components[comp.type]();
 		newComp.id = id;
 		newComp.children = comp.children;
+		newComp.x = x;
+		newComp.y = y;
 		
 		let evs = [];
 		
