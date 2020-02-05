@@ -1,7 +1,9 @@
 function saveToJSON() {
 	let json = {
 		nextComponentID: Component.nextId,
-		components:{}
+		components:{},
+		localise:localise,
+		lang:lang
 	};
 	
 	// Save components
@@ -16,7 +18,7 @@ function saveToJSON() {
 		json.components[comp.id] = compJSON;
 	}
 	
-	download("data:text/json;base64," + btoa(JSON.stringify(json)), "application.json");
+	download("data:text/json;base64," + btoa(encodeURIComponent(JSON.stringify(json))), "application.json");
 }
 
 function loadFromJSON(json) {
@@ -25,14 +27,17 @@ function loadFromJSON(json) {
 	
 	let newPageComponents = {};
 	
+	localise = json.localise;
+	lang = json.lang;
+	
 	// Load components
 	for (let id of Object.keys(json.components)) {
 		let comp = json.components[id];
 		let newComp = new components[comp.type]();
 		newComp.id = id;
 		newComp.children = comp.children;
-		newComp.x = x;
-		newComp.y = y;
+		newComp.x = comp.x;
+		newComp.y = comp.y;
 		
 		let evs = [];
 		

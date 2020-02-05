@@ -120,7 +120,7 @@ function openPopUp(button, width, height, belowButton) {
 	
 	$("#overlay").style.display = "block";
 	
-	// popUp.innerHTML = "";
+	popUp.innerHTML = "";
 	
 	let rect = button.getBoundingClientRect();
 	
@@ -142,7 +142,7 @@ function uploadJSONFile() {
 	inp.addEventListener("change", (ev)=>{
 		let reader = new FileReader();
 		reader.onload = (e)=>{
-			loadFromJSON(JSON.parse(e.target.result));
+			loadFromJSON(JSON.parse(decodeURIComponent(e.target.result)));
 		}
 		reader.readAsText(ev.target.files[0]);
 	});
