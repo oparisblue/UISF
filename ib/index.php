@@ -45,8 +45,8 @@
 		</div>
 		<div id="toolbar">
 			<button><i class="mdi mdi-file"></i> New</button>
-			<button><i class="mdi mdi-content-save"></i> Save</button>
-			<button><i class="mdi mdi-folder-open"></i> Open</button>
+			<button onclick="saveToJSON()"><i class="mdi mdi-content-save"></i> Save</button>
+			<button onclick="uploadJSONFile()"><i class="mdi mdi-folder-open"></i> Open</button>
 			|
 			<button onclick="openComponentLibrary();"><i class="mdi mdi-plus"></i> Add Component</button>
 			|

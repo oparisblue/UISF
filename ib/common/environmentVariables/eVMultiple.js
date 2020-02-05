@@ -5,6 +5,10 @@ class EVMultiple extends EnvironmentVariable {
 		this.others = others;
 	}
 	
+	toJSON() {
+		return {name: "multiple", others: this.others.map((x)=>x.toJSON()), properties: this.properties};
+	}
+	
 	predicate() {
 		// Are all of the other predicates true?
 		return this.others.reduce((acc, val)=>acc && val.predicate(), true);

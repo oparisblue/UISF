@@ -18,6 +18,10 @@ function makeEqualityComp(id, name, desc, check, inputType) {
 			this.fields.OUTPUT.value = this.check(this.fields.INPUT_ONE.value, this.fields.INPUT_TWO.value);
 		}
 		
+		getComponentName() {
+			return id;
+		}
+		
 		static getEditorInfo() {
 			return {
 				name: name,

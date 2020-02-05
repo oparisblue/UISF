@@ -5,6 +5,10 @@ class EVReduceMotion extends EnvironmentVariable {
 		this.shouldBeTrue = shouldBeTrue;
 	}
 	
+	toJSON() {
+		return {name: "reduceMotion", shouldBeTrue: this.shouldBeTrue, properties: this.properties};
+	}
+	
 	predicate() {
 		return env.doReduceMotion && env.isReducedMotion;
 	}

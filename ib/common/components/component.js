@@ -51,9 +51,9 @@ class Component {
 					
 					let actionHTML = ``;
 					for (let k of Object.keys(this.actions)) {
-						let ev = this.events[k];
+						let ev = this.actions[k];
 						actionHTML += `
-							<div class="inletRow" title="${ev.description}" onclick="editorWireTo(${this.id}, 'action', '${k}')">
+							<div class="inletRow" title="${ev.description}" onmouseup="editorWireTo(${this.id}, 'action', '${k}')">
 								<i class="mdi mdi-arrow-right-bold"></i> ${ev.name}
 							</div>
 						`;
@@ -77,6 +77,7 @@ class Component {
 					menu.innerHTML = `
 						${draggingWire.type == "event"  ? `<strong>Actions:</strong><br>${actionHTML}` : `<strong>Inlets:</strong><br>${inletHTML}`}
 					`;
+					
 					menu.style.left    = mouseX + "px";
 					menu.style.top     = mouseY + "px";
 					menu.style.display = "block";
@@ -84,6 +85,7 @@ class Component {
 					$("#overlay").style.display = "block";
 					draggingWire.drawWire = false;
 					$("#main").classList.remove("wireToElement");
+					console.log(draggingWire)
 				}
 			});
 			
@@ -163,6 +165,7 @@ class Component {
 	getDefaultWidth()      { return 0;  }
 	getDefaultHeight()     { return 0;  }
 	onTick()               {            }
+	getComponentName()     {return "";  }
 	
 	// Concrete
 	
@@ -195,13 +198,13 @@ class Component {
 	
 	addChild(child) {
 		this.children.push(child);
-		this.domNode.appendChild(child.domNode);
+		this.domNode.appendChild(pageComponents[child].domNode);
 		child.parent = this;
 	}
 	
 	removeChild(child) {
 		this.children.splice(this.children.indexOf(child), 1);
-		this.domNode.remove(child);
+		this.domNode.remove(pageComponents[child].domNode);
 	}
 	
 	onUpdateTick() {
@@ -262,7 +265,7 @@ class Component {
 		}
 		
 		// Tick children
-		for (let child of this.children) child.onUpdateTick();
+		for (let child of this.children) pageComponents[child].onUpdateTick();
 		
 	}
 	
@@ -270,7 +273,7 @@ class Component {
 		if (!this.eventListeners.hasOwnProperty(ev)) return;
 		for (let listener of this.eventListeners) {
 			if (listener.fromName == "ev") {
-				pageComponents[listener.toId].methods[listener.toName](...params);
+				pageComponents[listener.toId].actions[listener.toName].func(...params);
 			}
 		}
 	}

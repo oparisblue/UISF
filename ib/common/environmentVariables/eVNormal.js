@@ -1,5 +1,9 @@
 class EVNormal extends EnvironmentVariable {
 	
+	toJSON() {
+		return {name: "normal", properties: this.properties};
+	}
+	
 	compareTo(_ev) {
 		return -1;
 	}

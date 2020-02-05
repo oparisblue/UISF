@@ -94,6 +94,10 @@ function editSelectNode(node) {
 	$("#tab0").innerHTML = "";
 	if (node != null) {
 		node.domNode.classList.add("editorSelected");
+		
+		// Draw wires
+		//console.log(node.outlets, node.);
+		
 		rebuildInspector();
 	}
 }
@@ -128,4 +132,20 @@ function openPopUp(button, width, height, belowButton) {
 	if (!belowButton) popUp.classList.add("popUpAboveButton");
 	
 	return popUp;
+}
+
+function uploadJSONFile() {
+	let inp = document.createElement("input");
+	inp.type = "file";
+	inp.style.display = "none";
+	inp.accept = ".json";
+	inp.addEventListener("change", (ev)=>{
+		let reader = new FileReader();
+		reader.onload = (e)=>{
+			loadFromJSON(JSON.parse(e.target.result));
+		}
+		reader.readAsText(ev.target.files[0]);
+	});
+	document.body.appendChild(inp);
+	inp.click();
 }
