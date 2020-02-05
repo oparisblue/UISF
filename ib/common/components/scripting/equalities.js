@@ -6,9 +6,9 @@ function makeEqualityComp(id, name, desc, check, inputType) {
 			this.check = check;
 			
 			this.fields = {
-				INPUT_ONE: new inputType("p", `The first input`,  null, SHOW_IN_INSPECTOR + SHOW_IN_INLETS),
-				INPUT_TWO: new inputType("q", `The second input`, null, SHOW_IN_INSPECTOR + SHOW_IN_INLETS),
-				OUTPUT:    new DTBool("Output", "True if " + desc, false, SHOW_IN_OUTLETS)
+				INPUT_ONE: new inputType("p",   "The first input",  null,  SHOW_IN_INSPECTOR + SHOW_IN_INLETS),
+				INPUT_TWO: new inputType("q",   "The second input", null,  SHOW_IN_INSPECTOR + SHOW_IN_INLETS),
+				OUTPUT:    new DTBool("Output", `True if ${desc}`,  false, SHOW_IN_OUTLETS)
 			};
 			
 			this.build();
@@ -21,7 +21,7 @@ function makeEqualityComp(id, name, desc, check, inputType) {
 		static getEditorInfo() {
 			return {
 				name: name,
-				description: "Checks if " + desc
+				description: `Checks if ${desc}`
 			}
 		}
 	}

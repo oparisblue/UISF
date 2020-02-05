@@ -354,3 +354,82 @@ body {
 .emulateTable {
 	text-align:left !important;
 }
+
+#languageSelect {
+	width: 100px;
+	margin: 4px 0 8px;
+	position: relative;
+}
+
+.localiseNewLanguage {
+	margin: 4px 0 12px;
+}
+
+.localiseTable {
+	width: 80%;
+	margin: 0 auto;
+	border-collapse: collapse;
+	display: block;
+	max-height: 280px;
+	overflow-y: scroll;
+}
+
+.localiseHead {
+	background-color: black;
+	display: flex;
+}
+.localiseHead .title, .localiseRow div {
+	width: 50%;
+	padding: 4px 0;
+	box-sizing: border-box;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#localiseBody {
+	max-height: 240px;
+	overflow-y: scroll;
+	border-bottom: 1px solid black
+}
+
+.localiseRow {
+	display: flex;
+	cursor: pointer;
+	outline: none !important;
+}
+.localiseRow:hover {
+	background-color: rgba(0,0,0,0.2);
+}
+.localiseRow:focus {
+	background-color: #f44336;
+	box-shadow: none !important
+}
+.localiseRow div:first-of-type {
+	border-left: 1px solid black;
+	border-right: 1px solid black;
+}
+.localiseRow div:last-of-type {
+	border-right: 1px solid black;
+}
+.localiseRow:not(:last-of-type) {
+	border-bottom: 1px solid black;
+}
+
+.localiseFooter {
+	position: absolute;
+	bottom: 1em;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 80%;
+	margin-top: 8px;
+}
+
+#localiseSearch {
+	margin: 8px 0;
+}
+
+.localiseNewValue {
+	margin-top: 8px;
+}
+

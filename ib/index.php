@@ -6,7 +6,6 @@
 " rel="stylesheet" type="text/css" media="none" onload="media='all'">
 		<link rel="stylesheet" href="editor.css">
 		<link rel="stylesheet" href="common.css">
-		
 		<script>
 			<?php 
 			
@@ -25,8 +24,6 @@
 			
 			?>
 		</script>
-		
-		
 		<title>Scaffold</title>
 	</head>
 	<body>
@@ -53,7 +50,7 @@
 			|
 			<button onclick="openComponentLibrary();"><i class="mdi mdi-plus"></i> Add Component</button>
 			|
-			<button><i class="mdi mdi-earth"></i> Localise</button>
+			<button id="localiseButton" onclick="localisationPopup();"><i class="mdi mdi-earth"></i> Localise</button>
 			|
 			<button class="emuButton" onclick="emulationPopup();">
 				<div class="emuTitle"><i class="mdi mdi-monitor-screenshot"></i> Emulation</div>&#8203;

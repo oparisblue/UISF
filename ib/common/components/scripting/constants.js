@@ -21,7 +21,7 @@ class ComponentPI extends ScriptingComponent {
 	static getEditorInfo() {
 		return {
 			name: "PI",
-			description: `A constant representing different values of PI`
+			description: "A constant representing different values of PI"
 		}
 	}
 }
@@ -43,7 +43,7 @@ class ComponentTrue extends ScriptingComponent {
 	static getEditorInfo() {
 		return {
 			name: "True",
-			description: `A constant representing the boolean True`
+			description: "A constant representing the boolean True"
 		}
 	}
 }
@@ -65,7 +65,7 @@ class ComponentFalse extends ScriptingComponent {
 	static getEditorInfo() {
 		return {
 			name: "False",
-			description: `A constant representing the boolean False`
+			description: "A constant representing the boolean False"
 		}
 	}
 }
@@ -87,7 +87,7 @@ class ComponentPositiveInfinity extends ScriptingComponent {
 	static getEditorInfo() {
 		return {
 			name: "Positive Infinity",
-			description: `A constant representing +Infinity`
+			description: "A constant representing positive Infinity"
 		}
 	}
 }
@@ -109,7 +109,7 @@ class ComponentNegitiveInfinity extends ScriptingComponent {
 	static getEditorInfo() {
 		return {
 			name: "Negitive Infinity",
-			description: `A constant representing -Infinity`
+			description: "A constant representing negitive Infinity"
 		}
 	}
 }

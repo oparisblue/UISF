@@ -116,7 +116,7 @@ function openPopUp(button, width, height, belowButton) {
 	
 	$("#overlay").style.display = "block";
 	
-	popUp.innerHTML = "";
+	// popUp.innerHTML = "";
 	
 	let rect = button.getBoundingClientRect();
 	

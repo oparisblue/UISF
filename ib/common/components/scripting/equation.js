@@ -4,8 +4,8 @@ class Equation extends ScriptingComponent {
 		super(x, y);
 		
 		this.fields = {
-			EQUATION: new DTString("Equation", "A math equation", "", SHOW_IN_INSPECTOR),
-			OUTPUT: new DTNumber("Output", "The reult of the equation", 0, SHOW_IN_OUTLETS)
+			EQUATION: new DTString("Equation", "A math equation",           "", SHOW_IN_INSPECTOR),
+			OUTPUT:   new DTNumber("Output",   "The reult of the equation", 0,  SHOW_IN_OUTLETS)
 		};
 		
 		this.build();
